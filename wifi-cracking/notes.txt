@@ -1,0 +1,29 @@
+NOTES:
+WiFite runs on Python2 and not on Python3, though a rewrite was made for Python3 compatibility (https://github.com/derv82/wifite2/)
+
+ISSUES:
+0. pyrit not found 
+	0.1 git clone https://github.com/JPaulMora/Pyrit.git /opt/pyrit
+	0.2 cd opt/pyrit
+	0.3 sudo pip install psycopg2
+	0.4 sudo pip install scapy                
+	0.4.1 sudo apt-get install python-scapy #IF 0.4 DIDN'T WORK, TRY THIS
+	0.5 python setup.py clean
+	0.6 python setup.py build
+	
+1. Python.h not found (during 0.6) -> sudo apt-get install python2-dev
+
+2. openssl/hmac.h not found (during 0.6) -> sudo apt-get install libcap-dev && sudo apt-get install libssl-dev
+
+3. pcap.h not found (during 0.6) -> sudo apt-get install libpcap-dev
+
+Crunch Charset:
+cat /usr/share/rainbowcrack/charset.txt 
+
+Fluxion
+https://null-byte.wonderhowto.com/forum/wifi-hacking-crack-wep-wpa-wpa2-password-without-dictionary-bruteforce-new-methode-fluxion-0174280/
+
+Commands:
+1. WPA Only, No PMKID, Skip-crack: wifite --wpa --no-pmkid --skip-crack
+2. WPS Only: wifite --wps-only
+3. WPA Only, No PMKID, Custom Dictionary: wifite --wpa --no-pmkid --dict <path to dict>

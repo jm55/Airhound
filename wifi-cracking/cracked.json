@@ -1,0 +1,12 @@
+[
+  {
+    "type": "WPS",
+    "date": 1666491236,
+    "essid": "LAB_NETWORK",
+    "bssid": "AC:84:C6:94:DA:08",
+    "channel": "10",
+    "pin": "27810354",
+    "psk": "27810354",
+    "loc": "ND"
+  }
+]
