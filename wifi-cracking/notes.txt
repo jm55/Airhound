@@ -27,3 +27,7 @@ Commands:
 1. WPA Only, No PMKID, Skip-crack: wifite --wpa --no-pmkid --skip-crack
 2. WPS Only: wifite --wps-only
 3. WPA Only, No PMKID, Custom Dictionary: wifite --wpa --no-pmkid --dict <path to dict>
+
+Sample:
+wifite --wpa --no-pmkid --dict /home/kali/Documents/GitHub/wordlists/passwords/most_used_passwords.txt
+
