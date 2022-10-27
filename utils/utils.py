@@ -1,3 +1,11 @@
+'''
+==============================
+NSSECU2 - Hacking Tool Project
+==============================
+Members: Escalona, Fadrigo, Fortiz, Manzano, Sy
+Topic: WiFi Hacking Tool
+'''
+
 import sys
 import os
 import platform

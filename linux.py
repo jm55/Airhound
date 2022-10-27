@@ -1,3 +1,13 @@
+'''
+==============================
+NSSECU2 - Hacking Tool Project
+==============================
+Members: Escalona, Fadrigo, Fortiz, Manzano, Sy
+Topic: WiFi Hacking Tool
+
+linux.py module
+'''
+
 import utils.utils as utils
 import scanning.interfaces.interfaces as interfaces
 
@@ -34,6 +44,7 @@ def get_wifi_devices():
     return interf 
 
 def scan_wifi(interf):
+    print("Scan WiFi")
 
 def run():
     confirm()
