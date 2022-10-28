@@ -4,12 +4,13 @@ NSSECU2 - Hacking Tool Project
 ==============================
 Members: Escalona, Fadrigo, Fortiz, Manzano, Sy
 Topic: WiFi Hacking Tool
+Description: The objective of this project is to create a packaged tool that will be able to do Wi-Fi scanning, cracking, and admin control access.
+Objective Functionalities:
+    1. WiFi Scanning
+    2. WiFi Cracking
+    3. WAP/Router Admin Control Access
 
-Some part of the code was 
-referenced from David Bombal's 
-YT Tutorial (https://www.youtube.com/watch?v=SzYKzAHsdMg)
-
-windows.py module
+WINDOWS SUBDRIVER MODULE
 '''
 
 from numpy import int_, str_
@@ -17,6 +18,7 @@ import utils.utils as utils
 import subprocess
 import re
 
+#Saves collected WiFi credentials as .csv
 def saveAsCSV(filename, wifi_list):
     if ".csv" not in filename:
         filename += ".csv"
@@ -30,6 +32,7 @@ def saveAsCSV(filename, wifi_list):
     except:
         return None
 
+#Saves collected WiFi credentials as .txt
 def saveAsTXT(filename, wifi_list):
     if ".txt" not in filename:
         filename += ".txt"
@@ -45,7 +48,8 @@ def saveAsTXT(filename, wifi_list):
     except:
         return None
 
-
+#Driver for Windows-based function
+#Serves as home menu
 def run():
     utils.confirm(utils.running_OS())
     invalid = True
@@ -80,7 +84,8 @@ def run():
                 input("Press any key to continue...")
             elif choice == int_choices[2]:
                 exit(0)
-    
+
+#Extract saved WiFi credentials from Windows using netsh command.
 def extract_wifi():
     netsh = subprocess.run(["netsh", "wlan", "show", "profiles"], capture_output = True).stdout.decode()
     profiles = re.findall("All User Profile     : (.*)\r", netsh)
@@ -112,6 +117,7 @@ def extract_wifi():
                 wifi_list.append(wifi)
     return wifi_list
 
+#Find longest value from dict
 def longest(list, key):
     length = 0
     for l in list:
@@ -119,12 +125,15 @@ def longest(list, key):
             length = len(l[key])
     return length
 
+#Find longest SSID from list
 def longest_ssid(list):
     return longest(list, "ssid")
 
+#Find longest password from list
 def longest_password(list):
     return longest(list, "password")
 
+#Find longest security config from list
 def longest_secu(list):
     length = 0
     for l in list:
@@ -132,13 +141,17 @@ def longest_secu(list):
             length = len(l["authentication"] + " " + l["cipher"])
     return length
 
+#Print list of WiFi information
 def print_wifi(list):
-    long_ssid = longest_ssid(list) + 4
-    long_pass = longest_password(list) + 4
-    long_auth = longest_secu(list) + 4
-    utils.header("Windows WiFi Credentials", "Extract Stored WiFi Credentials")
-    utils.print_bar(long_ssid + long_pass + long_auth)
-    print("SSID".ljust(long_ssid) + "Password".ljust(long_pass) + "Security")
-    for wifi in list:
-        print(str(wifi["ssid"]).ljust(long_ssid) + str(wifi["password"]).ljust(long_pass) + (wifi["authentication"]+' '+wifi["cipher"]))
-    utils.print_bar(long_ssid + long_pass + long_auth)
+    if len(list) == 0 or list == None:
+        print("WiFi list empty")
+    else:
+        long_ssid = longest_ssid(list) + 4
+        long_pass = longest_password(list) + 4
+        long_auth = longest_secu(list) + 4
+        utils.header("Windows WiFi Credentials", "Extract Stored WiFi Credentials")
+        utils.print_bar(long_ssid + long_pass + long_auth)
+        print("SSID".ljust(long_ssid) + "Password".ljust(long_pass) + "Security")
+        for wifi in list:
+            print(str(wifi["ssid"]).ljust(long_ssid) + str(wifi["password"]).ljust(long_pass) + (wifi["authentication"]+' '+wifi["cipher"]))
+        utils.print_bar(long_ssid + long_pass + long_auth)

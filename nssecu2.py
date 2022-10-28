@@ -12,9 +12,10 @@ Objective Functionalities:
 '''
 
 import utils.utils as utils
-import linux as lin
-import windows as win
+import subdrivers.linux as lin
+import subdrivers.windows as win
 
+#Main Function
 def main():
     if not oath():
         exit(0)
@@ -29,18 +30,14 @@ def main():
         print("OS not supported, exiting...")
         exit(0)
 
+#T&C essentially.
 def oath():
     invalid = True
     while invalid:
         oath = "I do solemnly swear that I am up to GOOD"
-        utils.header("Oath", oath)
-        ans = input("Do you agree to the terms? (Y/N): ")
-        if ans == 'Y' or ans == 'y':
-            return True
-        if ans == 'N' or ans == 'n':
-            return False
-        utils.cls()
+        return utils.yesNo("Oath",oath,"Do you agree to the terms?",True)
 
+#Delegates Linux execution
 def linux():
     if utils.root_check():
         lin.run()
@@ -49,6 +46,7 @@ def linux():
         utils.getch("Press enter to exit...")
         exit(0)
 
+#Delegates Windows execution
 def windows():
     win.run()
     
