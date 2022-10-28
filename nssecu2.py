@@ -45,8 +45,8 @@ def linux():
     if utils.root_check():
         lin.run()
     else:
-        utils.titlebar()
-        print("Application must run in root!")
+        utils.header("SUDO REQUIRED","Application must run in root!")
+        utils.getch("Press enter to exit...")
         exit(0)
 
 def windows():

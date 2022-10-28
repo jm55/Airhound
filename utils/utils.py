@@ -34,24 +34,26 @@ about_content = [   "===========================================================
                     "        Objective Functionalities:",
                     "            1. WiFi Scanning",
                     "            2. WiFi Cracking", 
-                    "            3. WAP/Router Admin Control Access", 
+                    "            3. WAP/Router Admin Control Access",
+                    "            4. WiFi DOS",
+                    "            5. Windows Saved Passwords (if on Windows)",
                     "=============================================================="
                 ]
 
-def bar(len):
+def bar(len:str):
     b = ""
     for l in range(len):
         b += "="
     return b
 
-def print_bar(len):
+def print_bar(len:str):
     b = bar(int(len))
     print(b)
 
 def get_bar():
     return bar(20)
 
-def titlebar(length):
+def titlebar(length:int):
     print_bar(length)
     print(title.center(length))
     print_bar(length)
@@ -65,38 +67,45 @@ def about():
     getch()
     cls()
 
-def header(module, desc=""):
+def header(module:str, desc=None):
     cls()
-    longest_desc = ""
-    if type(desc) == isinstance(desc,list):
-        for d in desc:
-            if len(longest_desc) < d:
-                longest_desc = d
-    else:
-        longest_desc = desc
-    if module != None:
-        if len(title) < len(module) or len(module) < len(longest_desc):
-            if len(module) < len(longest_desc):
+    if module != None: #Module Name
+        if desc != None: #Module Name & Description
+            if len(module) < len(desc):
                 titlebar(len(desc))
-                print(module.center(len(longest_desc)))
+                print(module.center(len(desc)))
                 print("")
                 print(desc)
-                print_bar(len(longest_desc))
+                print_bar(len(desc))
+            elif len(title) < len(module) & len(module) > len(desc):
+                titlebar(len(module))
+                print(module.center(len(module)))
+                print("")
+                print(desc.center(len(module)))
+                print_bar(len(module))
             else:
+                titlebar(len(title))
+                print(module.center(len(title)))
+                print("")
+                print(desc.center(len(title)))
+                print_bar(len(title))
+        else:
+            if len(title) < len(module):
                 titlebar(len(module))
                 print(module.center(len(module)))
                 print_bar(len(module))
-        else:
-            titlebar(len(title))
-            print(module.center(len(title)))
-            print_bar(len(title))
+            else:
+                titlebar(len(title))
+                print(module.center(len(title)))
+                print_bar(len(title))
+
     else:
-        titlebar()
+        titlebar(len(title))
 
 def running_OS():
     return "You are running " + getOS()
 
-def os_check(os):
+def os_check(os:str):
     if(sys.platform == os):
         return True
     return False
@@ -132,5 +141,38 @@ def root_check():
         return False
     return True
 
-def getch():
-    input("Press Enter to continue...")
+def getch(msg=""):
+    if msg == "":
+        input("Press Enter to continue...")
+    else:
+        input(msg)
+
+def check_menu(int_choices:str, str_choices:list):
+    if len(int_choices) == len(str_choices):
+        return True
+    return False
+
+def menu(int_choices:str, str_choices:list):
+    if not check_menu(int_choices, str_choices):
+        print("Menu configuration mismatch! Exiting...")
+        exit(1)
+    ctr = 0
+    for ctr in range(len(int_choices)):
+        print(str(int_choices[ctr]) + " - " + str_choices[ctr])
+    return input("Enter choice: ")
+
+def valid_choice(choice, choices):
+    for c in choices:
+        if choice == c:
+            return True
+    return False
+
+def longest_string(list):
+    longest = ""
+    for l in list:
+        if len(longest) < l:
+            longest = l
+    return longest
+
+def longest_string_len(list:list):
+    return longest_string(list)

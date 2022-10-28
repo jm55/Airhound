@@ -50,7 +50,7 @@ def run():
     utils.confirm(utils.running_OS())
     invalid = True
     while invalid:
-        utils.header("Windows WiFi Credentials", "Extract Stored WiFi Credentials")
+        utils.header("Windows Easter Egg", "Extract Stored WiFi Credentials")
         print("Searching stored WiFi credentials...")
         wifi_list = extract_wifi()
         utils.header("Windows WiFi Credentials", "Extract Stored WiFi Credentials")
@@ -59,40 +59,27 @@ def run():
         str_choices = [ "Save as .csv",
                         "Save as .txt",
                         "Exit"]
-        choice = menu(int_choices, str_choices)
-        if choice >= int_choices[0] and choice <= int_choices[1]:
-            filename = input("Enter filename: ")
-            if choice == int_choices[0]:
-                csv = saveAsCSV(filename, wifi_list)
-                print_wifi(wifi_list)
-                if csv != None:
-                    print("File saving success!\nSaved as " + csv)
-                else:
-                    print("Error occured while saving " + csv)
-            elif choice == int_choices[1]:
-                txt = saveAsTXT(filename, wifi_list)
-                print_wifi(wifi_list)
-                if txt != None:
-                    print("File saving success!\nSaved as " + txt)
-                else:
-                    print("Error occured while saving " + txt)
-            input("Press any key to continue...")
-        elif choice == int_choices[2]:
-            exit(0)
-
-def check_menu(int_choices, str_choices):
-    if len(int_choices) == len(str_choices):
-        return True
-    return False
-
-def menu(int_choices, str_choices):
-    if not check_menu(int_choices, str_choices):
-        print("Menu configuration mismatch! Exiting...")
-        exit(1)
-    ctr = 0
-    for ctr in range(len(int_choices)):
-        print(str(int_choices[ctr]) + " - " + str_choices[ctr])
-    return input("Enter choice: ")
+        choice = utils.menu(int_choices, str_choices)
+        if utils.valid_choice(choice, int_choices):
+            if choice >= int_choices[0] and choice <= int_choices[1]:
+                filename = input("Enter filename: ")
+                if choice == int_choices[0]:
+                    csv = saveAsCSV(filename, wifi_list)
+                    print_wifi(wifi_list)
+                    if csv != None:
+                        print("File saving success!\nSaved as " + csv)
+                    else:
+                        print("Error occured while saving " + csv)
+                elif choice == int_choices[1]:
+                    txt = saveAsTXT(filename, wifi_list)
+                    print_wifi(wifi_list)
+                    if txt != None:
+                        print("File saving success!\nSaved as " + txt)
+                    else:
+                        print("Error occured while saving " + txt)
+                input("Press any key to continue...")
+            elif choice == int_choices[2]:
+                exit(0)
     
 def extract_wifi():
     netsh = subprocess.run(["netsh", "wlan", "show", "profiles"], capture_output = True).stdout.decode()
