@@ -16,9 +16,10 @@ import linux as lin
 import windows as win
 
 def main():
-
     if not oath():
         exit(0)
+
+    utils.about()
 
     if utils.linux_check():
         linux()
@@ -31,9 +32,8 @@ def main():
 def oath():
     invalid = True
     while invalid:
-        utils.cls()
-        utils.titlebar()
-        print("I do solemnly swear that I am up to GOOD")
+        oath = "I do solemnly swear that I am up to GOOD"
+        utils.header("Oath", oath)
         ans = input("Do you agree to the terms? (Y/N): ")
         if ans == 'Y' or ans == 'y':
             return True

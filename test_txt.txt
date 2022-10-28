@@ -1,0 +1,8 @@
+SSID: PLDTHOMEFIBR_ESCALONA
+Password: anolacse00
+Security: WPA2-Personal CCMP
+
+SSID: LAB_NETWORK
+Password: successful
+Security: WPA2-Personal CCMP
+

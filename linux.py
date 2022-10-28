@@ -12,12 +12,11 @@ import utils.utils as utils
 import scanning.interfaces.interfaces as interfaces
 
 def confirm():
-    utils.cls()
-    utils.titlebar()
+    utils.header(None)
     print("You are running Linux")
     print(utils.getOS())
     utils.bar()
-    input("Press Enter to continue...")
+    utils.getch()
 
 def menu():
     invalid = True
