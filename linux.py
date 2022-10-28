@@ -31,14 +31,15 @@ def run():
             if choice == "0":
                 exit(0)
             elif choice == "1":
-                print(str_choices[int(choice)])
+                print("Test: " + str_choices[int(choice)-1])
             elif choice == "2":
-                print(str_choices[int(choice)])
+                print("Test: " + str_choices[int(choice)-1])
             elif choice == "3":
-                print(str_choices[int(choice)])
+                print("Test: " + str_choices[int(choice)-1])
             elif choice == "4":
-                print(str_choices[int(choice)])
+                print("Test: " + str_choices[int(choice)-1])
             elif choice == "5":
-                print(str_choices[int(choice)])
-            time.sleep(5) 
+                print("Test: " + str_choices[int(choice)-1])
+            print("Wait for 1sec")
+            time.sleep(1) 
     exit(0)
