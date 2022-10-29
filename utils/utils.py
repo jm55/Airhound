@@ -9,7 +9,7 @@
                      able to do Wi-Fi scanning, cracking, 
                      and admin control access.
         Objective Functionalities:
-            1. WiFi Scanning
+            1. WiFi Scanning & Handshake Capture
             2. WiFi Cracking
             3. WAP/Router Admin Control Access
             4. WiFi DOS
@@ -29,17 +29,17 @@ test = ["1","2","3"]
 about_content = [   "==============================================================", 
                     "                NSSECU2 - Hacking Tool Project", 
                     "==============================================================",
-                    "        Members: Escalona, Fadrigo, Fortiz, Manzano, Sy",
-                    "        Topic: WiFi Hacking Tool", "        Description: The objective of this project is to ",
+                    "      Members: Escalona, Fadrigo, Fortiz, Manzano, Sy",
+                    "      Topic: WiFi Hacking Tool", "        Description: The objective of this project is to ",
                     "                     create a packaged tool that will be ",
                     "                     able to do Wi-Fi scanning, cracking, ",
                     "                     and admin control access.", 
-                    "        Objective Functionalities:",
-                    "            1. WiFi Scanning",
-                    "            2. WiFi Cracking", 
-                    "            3. WAP/Router Admin Control Access",
-                    "            4. WiFi DOS",
-                    "            5. Windows Saved WiFi Passwords (if on Windows)",
+                    "      Objective Functionalities:",
+                    "          1. WiFi Scanning & Handshake Capture",
+                    "          2. WiFi Cracking", 
+                    "          3. WAP/Router Admin Control Access",
+                    "          4. WiFi DOS",
+                    "          5. Windows Saved WiFi Passwords (if on Windows)",
                     "=============================================================="
                 ]
 
@@ -77,29 +77,39 @@ def about():
     getch()
     cls()
 
+
+
+def print_header(module:str, desc, longest:int):
+    titlebar(longest)
+    print(module.center(longest+4))
+    print("")
+    if type(desc) == list:
+        for d in desc:
+            print(d.center(longest+4))
+    else:
+        print(desc.center(longest+4))
+    print_bar(longest)
+
 #Print header data
 def header(module:str, desc=None):
     cls()
     if module != None: #Module Name
         if desc != None: #Module Name & Description
-            if len(module) < len(desc):
-                titlebar(len(desc))
-                print(module.center(4+len(desc)))
-                print("")
-                print(desc.center(4+len(desc)))
-                print_bar(len(desc))
-            elif len(title) < len(module) & len(module) > len(desc):
-                titlebar(len(module))
-                print(module.center(4+len(module)))
-                print("")
-                print(desc.center(4+len(module)))
-                print_bar(len(module))
+            if type(desc) == list:
+                longest = len(title)
+                if longest < len(module):
+                    longest = len(module)
+                for d in desc:
+                    if longest < len(d):
+                        longest = len(d)
+                print_header(module, desc, longest)
             else:
-                titlebar(len(title))
-                print(module.center(4+len(title)))
-                print("")
-                print(desc.center(4+len(title)))
-                print_bar(len(title))
+                if len(module) < len(desc):
+                    print_header(module, desc, len(desc))
+                elif len(title) < len(module) & len(module) > len(desc):
+                    print_header(module, desc, len(module))
+                else:
+                    print_header(module, desc, len(title))
         else:
             if len(title) < len(module):
                 titlebar(len(module))

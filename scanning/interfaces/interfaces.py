@@ -6,7 +6,7 @@ Members: Escalona, Fadrigo, Fortiz, Manzano, Sy
 Topic: WiFi Hacking Tool
 Description: The objective of this project is to create a packaged tool that will be able to do Wi-Fi scanning, cracking, and admin control access.
 Objective Functionalities:
-    1. WiFi Scanning
+    1. WiFi Scanning & Handshake Capture
     2. WiFi Cracking
     3. WAP/Router Admin Control Access
 
@@ -91,7 +91,7 @@ def print_interfaces(devices):
 
 #Ask user for interface selection
 #Returns JSON formatted choice of WLAN or None if none was selected (i.e., Exit)
-def get_interfaces():
+def get_interface():
     utils.header("Scanning WLAN devices...")
     wifi_devices = scan()
     if wifi_devices != None:
@@ -123,7 +123,7 @@ def get_interfaces():
 def get_key(device, key):
     if device != None:
         return device[key]
-    return "N/A"
+    return None
 
 #Returns logical name of the device. Example: wlan0, wlan1, etc.
 def get_logicalname(device):
@@ -136,3 +136,19 @@ def get_macaddress(device):
 #Returns the driver/chipset of the device.
 def get_driver(device):
     return get_key(device,"configuration")["driver"]
+
+#Returns summary of the device given in [logicalname, macaddress, driver/chipset] format.
+def get_device_summary(device):
+    return [get_logicalname(device), get_macaddress(device), get_driver(device)]
+
+#Prints the summary of the device given. Example below:
+#WLAN Device Details
+#WLAN Logicalname:   wlan1
+#WLAN MAC Address:   c6:d7:e8:7e:c6:f1
+#WLAN Driver:        mt7601u
+def print_device_summary(device):
+    print("WLAN Device Details")
+    summary = get_device_summary(device)
+    print("WLAN Logicalname: ".ljust(20) + summary[0])
+    print("WLAN MAC Address: ".ljust(20) + summary[1])
+    print("WLAN Driver: ".ljust(20) + summary[2])
