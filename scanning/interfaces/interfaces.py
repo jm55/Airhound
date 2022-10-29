@@ -112,6 +112,9 @@ def get_interfaces():
                 return None
             elif int(choice) >= 1 and int(choice) <= len(wifi_devices):
                 return wifi_devices[int(choice)-1]
+            elif choice == choices[2]:
+                utils.header("Scanning WLAN devices...")
+                wifi_devices = scan()
     else:
         utils.header("WLAN Device Selection", "No WLAN devices detected!")
         utils.getch()
