@@ -35,10 +35,11 @@ def get_target(device):
     device_driver = interface.get_driver(device)
     '''
     =======================
-    Airmon-ng Terminologies
+    Airodump-ng Terminologies
     =======================
     ssid        = essid
     mac-address = bssid 
+    channel     = channel
 
     =======================================================================
                                 INSTRUCTIONS
@@ -48,13 +49,13 @@ def get_target(device):
     the selected/target WiFi network.
 
     Use the device variable (containing raw JSON)
-    for device selection on airmon-ng.
+    for device selection on airmon-ng and airodump-ng.
 
     You may have to consider executing 'sudo airmon-ng start <device>'
     before running any airmon-ng scanning and airodump-ng capture commands.
 
     If user has not selected a target WiFi network, return as None
-    Otherwise return target WiFi details in [ssid, mac-address]
+    Otherwise return target WiFi details in [ssid, mac-address, channel]
     '''
     return None
 

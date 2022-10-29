@@ -15,6 +15,8 @@
             4. WiFi DOS
             5. Windows Saved WiFi Passwords
 ============================================================
+
+UTILITIES MODULE
 '''
 
 from operator import mod

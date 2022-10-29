@@ -117,7 +117,14 @@ def get_interface():
             elif choice == "0":
                 return None
             elif int(choice) >= 1 and int(choice) <= len(wifi_devices):
-                return wifi_devices[int(choice)-1]
+                selected_device = wifi_devices[int(choice)-1]
+                utils.header("WARNING", "Please disconnect " + selected_device + "from its current network.")
+                utils.getch()
+                #To replace with something that checks if the device is really disconnected
+                #Command to check: ifconfig $wlan_device | grep ip
+                #If result is empty, then it is disconnected
+                #Otherwise, it is still connected!
+                return selected_device
             elif choice == choices[2]:
                 utils.header("Scanning WLAN devices...")
                 wifi_devices = scan()
