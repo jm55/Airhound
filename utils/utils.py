@@ -165,7 +165,7 @@ def utf8_decode(data):
 
 #Check if running as root
 def root_check():
-    whoami = subprocess.Popen("whoami", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, )
+    whoami = subprocess.Popen("whoami", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     cls()
     whoami.wait()
     data, err = whoami.communicate()

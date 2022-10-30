@@ -23,6 +23,7 @@ import utils.utils as utils
 import interfaces.interfaces as interface
 import scanning.wifi.scan as scan
 import scanning.wifi.capture as capture
+import deauth.deauth as deauth
 import time
 import json
 
@@ -43,14 +44,14 @@ def run():
                         "WiFi DOS", "Select WLAN Device","Exit"]
         descs = [
                     "WLAN Device Selected: " + str(interface.get_logicalname(wlan_device)),
-                    "Previous Capture File: " + str(capture_filename)
+                    "Previous Captured File: " + str(capture_filename)
                 ]
         utils.header("Tools Menu", descs)
         choice = utils.menu(int_choices, str_choices)
         if utils.valid_choice(choice, int_choices):
             if choice == "0": #EXIT
                 exit(0)
-            elif choice == "1": #WIFI SCAN & CAPTURE
+            elif choice == "1" or choice == "3" or choice == "5":
                 if wlan_device == None:
                     utils.header("No WLAN device selected", 
                                     [
@@ -59,14 +60,20 @@ def run():
                                     ]
                                 )
                 else:
-                    capture_filename = wifi_scan_capture(wlan_device)
+                    if choice == "1": #WIFI SCAN+CAPTURE
+                        capture_filename = wifi_scan_capture(wlan_device)
+                    elif choice == "3": #FULL SUITE (WIFI SCAN+CAPTURE & WIFI CRACKING)
+                        print("Test: " + str_choices[int(choice)-1])
+                    elif choice == "5": #WIFI DOS
+                        print("Test: " + str_choices[int(choice)-1])
+                        wifi_dos(wlan_device)
+                    else:
+                        print("How did you get here??")
+                        exit(1)
             elif choice == "2": #WIFI CRACKING
                 print("Test: " + str_choices[int(choice)-1])
-            elif choice == "3": #FULL SUITE (1 & 2)
-                print("Test: " + str_choices[int(choice)-1])
+                utils.yesNo("WiFi Cracking", "This function expects that you have a captured file already.", "Do you have a captured file?", False)
             elif choice == "4": #WAP ADMIN ATTACK
-                print("Test: " + str_choices[int(choice)-1])
-            elif choice == "5": #WIFI DOS
                 print("Test: " + str_choices[int(choice)-1])
             elif choice == "6": #SELECT WLAN DEVICE
                 wlan_device = interface.get_interface()
@@ -88,3 +95,6 @@ def wifi_scan_capture(wlan_device):
         utils.header(str_choices[0])
         print("Function not allowed.\nYou haven't selected a WLAN device.")
     return None #Return captured filename
+
+def wifi_dos(wlan_device):
+    print("WiFi_DOS")

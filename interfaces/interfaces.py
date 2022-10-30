@@ -70,7 +70,7 @@ lshw subprocess formatted as JSON, example are as follows:
 #Retrieves network devices using lshw shell command.
 def scan():
     #With help from https://stackoverflow.com/a/50303518
-    lshw = subprocess.Popen("sudo lshw -class network -quiet -json", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, )
+    lshw = subprocess.Popen("sudo lshw -class network -quiet -json", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     lshw.wait()
     data, err = lshw.communicate()
     if lshw.returncode == 0:
@@ -168,7 +168,7 @@ def print_device_summary(device):
 
 #End possible interfering processes to WLAN device
 def terminate_services():
-    end_services = subprocess.Popen("sudo airmon-ng check kill", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, )
+    end_services = subprocess.Popen("sudo airmon-ng check kill", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     end_services.wait()
     res, err = end_services.communicate()
     if end_services.returncode == 0:
@@ -183,7 +183,7 @@ def restart_services():
                     "sudo systemctl start NetworkManager.service"
                 ]
     for c in commands:
-        p = subprocess.Popen(c, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, )
+        p = subprocess.Popen(c, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         p.wait()
         res, err = p.communicate()
         if p.returncode != 0:
@@ -209,7 +209,7 @@ def enable_mon(device):
     # some time, then it is assumed that the device does
     # not support monitor mode.
     
-    airmon_ng = subprocess.Popen("airmon-ng start " + logicalname, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, )
+    airmon_ng = subprocess.Popen("airmon-ng start " + logicalname, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     airmon_ng.wait()
     res, err = airmon_ng.communicate()
     if airmon_ng.returncode != 0:
@@ -222,7 +222,7 @@ def disable_mon(device):
 
 #Check if previous connections are restored
 def check_connection():
-    check = subprocess.Popen("ifconfig | grep wlan", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, )
+    check = subprocess.Popen("ifconfig | grep wlan", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     check.wait()
     res, err = check.communicate()
     if res.decode("utf-8") == "":

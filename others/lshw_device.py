@@ -4,7 +4,7 @@ import json
 
 def scan():
     #With help from https://stackoverflow.com/a/50303518
-    lshw = subprocess.Popen("sudo lshw -class network -quiet -json", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, )
+    lshw = subprocess.Popen("sudo lshw -class network -quiet -json", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     lshw.wait()
     data, err = lshw.communicate()
     if lshw.returncode == 0:

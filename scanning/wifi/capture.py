@@ -43,6 +43,6 @@ def capture_handshake(device, bssid:str):
 
     After capture was done, save capture .pcap file and return filename/file.
     '''
-    return None
+    return str(None)
 
 #IMPLEMENT ANYTHING HERE ACCORDINGLY
