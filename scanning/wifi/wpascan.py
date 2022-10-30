@@ -54,14 +54,13 @@ def get_target(device):
                 target_id = int(input("Enter ID# of target WiFi network: "))
                 if target_id == 0:
                     return None
-                elif target_id < 0 or target_id > len(filtered_list)-1:
+                elif target_id < 0 or target_id > len(filtered_list):
                     invalid = True
                 else:
                     invalid = False
+                    return filtered_list[target_id-1]
             except ValueError:
                 invalid = True
-
-    return filtered_list[target_id-1]
 
 
 

@@ -65,7 +65,7 @@ def get_target(device):
                     if target_id == 0:
                         rescan = False
                         invalid = False
-                    elif target_id < 1 or target_id > len(filtered_list)-1:
+                    elif target_id < 1 or target_id > len(filtered_list):
                         invalid = True
                     else:
                         invalid = False
