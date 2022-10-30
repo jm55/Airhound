@@ -98,7 +98,8 @@ def print_interfaces(devices):
 #Ask user for interface selection
 #Returns JSON formatted choice of WLAN or None if none was selected (i.e., Exit)
 def get_interface():
-    utils.header("Scanning WLAN devices...")
+    requirement()
+    utils.header("WLAN Device Selection","Scanning WLAN devices...")
     wifi_devices = scan()
     if wifi_devices != None:
         invalid = True
@@ -231,4 +232,16 @@ def check_connection():
     if res.decode("utf-8") == "":
         return False
     return True
-    
+
+def requirement():
+    descs = [   "==== HARDWARE CAPABILITY REQUIREMENT ====",
+                "\n",
+                "The tool requires certain WLAN chipsets in order to work.",
+                "\n",
+                "The WLAN devices you have must support monitoring/injection mode in order to work."
+                "\n",
+                "Refer to this link for more details: ",
+                "https://deviwiki.com/wiki/List_of_Wireless_Adapters_That_Support_Monitor_Mode_and_Packet_Injection"
+            ]
+    utils.header("WLAN Device Selection", descs)
+    utils.getch()
