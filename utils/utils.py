@@ -25,23 +25,24 @@ import os
 import platform
 import subprocess
 import json
-
+import csv
 title = "NSSECU2 Hacking Tool"
 test = ["1","2","3"]
 about_content = [   "==============================================================", 
                     "                NSSECU2 - Hacking Tool Project", 
                     "==============================================================",
-                    "      Members: Escalona, Fadrigo, Fortiz, Manzano, Sy",
-                    "      Topic: WiFi Hacking Tool", "        Description: The objective of this project is to ",
-                    "                     create a packaged tool that will be ",
-                    "                     able to do Wi-Fi scanning, cracking, ",
-                    "                     and admin control access.", 
-                    "      Objective Functionalities:",
-                    "          1. WiFi Scanning & Handshake Capture",
-                    "          2. WiFi Cracking", 
-                    "          3. WAP/Router Admin Control Access",
-                    "          4. WiFi DOS",
-                    "          5. Windows Saved WiFi Passwords (if on Windows)",
+                    "      Members: Escalona, Fadrigo, Fortiz, Manzano, Sy".ljust(62),
+                    "      Topic: WiFi Hacking Tool".ljust(62), 
+                    "      Description: The objective of this project is to ".ljust(62),
+                    "                   create a packaged tool that will be ".ljust(62),
+                    "                   able to do Wi-Fi scanning, cracking, ".ljust(62),
+                    "                   and admin control access.".ljust(62), 
+                    "      Objective Functionalities:".ljust(62),
+                    "         1. WiFi Scanning & Handshake Capture".ljust(62),
+                    "         2. WiFi Cracking", 
+                    "         3. WAP/Router Admin Control Access".ljust(62),
+                    "         4. WiFi DOS".ljust(62),
+                    "         5. Windows Saved WiFi Passwords (if on Windows)".ljust(62),
                     "=============================================================="
                 ]
 
@@ -54,7 +55,7 @@ def bar(len:str):
 
 #Print bar of specified length
 def print_bar(len:str):
-    b = bar(int(len)+4)
+    b = bar(int(len)+12)
     print(b)
 
 #Get standard bar of length 20.
@@ -64,7 +65,7 @@ def get_bar():
 #Get titlebar of specified length
 def titlebar(length:int):
     print_bar(length)
-    print(title.center(4+length))
+    print(title.center(12+length))
     print_bar(length)
 
 #Compile about list
@@ -79,20 +80,19 @@ def about():
     getch()
     cls()
 
-
-
+#Prints actual header with description
 def print_header(module:str, desc, longest:int):
     titlebar(longest)
-    print(module.center(longest+4))
+    print(module.center(longest+12))
     print("")
     if type(desc) == list:
         for d in desc:
-            print(d.center(longest+4))
+            print(d.center(longest+12))
     else:
-        print(desc.center(longest+4))
+        print(desc.center(longest+12))
     print_bar(longest)
 
-#Print header data
+#Print header controller
 def header(module:str, desc=None):
     cls()
     if module != None: #Module Name
@@ -115,13 +115,12 @@ def header(module:str, desc=None):
         else:
             if len(title) < len(module):
                 titlebar(len(module))
-                print(module.center(4+len(module)))
+                print(module.center(12+len(module)))
                 print_bar(len(module))
             else:
                 titlebar(len(title))
-                print(module.center(4+len(title)))
+                print(module.center(12+len(title)))
                 print_bar(len(title))
-
     else:
         titlebar(len(title))
     print("")
@@ -166,7 +165,7 @@ def utf8_decode(data):
 
 #Check if running as root
 def root_check():
-    whoami = subprocess.Popen("whoami", shell=True, stdout=subprocess.PIPE)
+    whoami = subprocess.Popen("whoami", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, )
     cls()
     whoami.wait()
     data, err = whoami.communicate()
@@ -244,4 +243,29 @@ def getDT():
 
 #Get formatted now datetime as yyyy-mm-dd-hh-mm-ss
 def getFormattedDT():
-    return str(getDT.strftime("%Y-%m-%d-%H-%M-%S"))
+    return str(getDT().strftime("%Y-%m-%d-%H-%M-%S"))
+
+#CSV to 2D list
+def csvToList(filepath:str):
+    try:
+        loc = filepath.rindex(".csv")
+        if len(filepath)-loc != 4:
+            return []
+    except ValueError:
+        filepath += ".csv"
+    
+    if not checkFile(filepath):
+        return []
+
+    f = open(filepath, "r")
+    
+    return list(csv.reader(f))
+
+def checkFile(filepath:str):
+    if os.path.exists(filepath):
+        return True
+    else:
+        return False
+
+def renameFile(src:str, dst:str):
+    rn = subprocess.run("mv " + src + " " + dst, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)

@@ -70,7 +70,7 @@ lshw subprocess formatted as JSON, example are as follows:
 #Retrieves network devices using lshw shell command.
 def scan():
     #With help from https://stackoverflow.com/a/50303518
-    lshw = subprocess.Popen("sudo lshw -class network -quiet -json", shell=True, stdout=subprocess.PIPE)
+    lshw = subprocess.Popen("sudo lshw -class network -quiet -json", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, )
     lshw.wait()
     data, err = lshw.communicate()
     if lshw.returncode == 0:
@@ -118,7 +118,7 @@ def get_interface():
                 return None
             elif int(choice) >= 1 and int(choice) <= len(wifi_devices):
                 selected_device = wifi_devices[int(choice)-1]
-                utils.header("WARNING", "Please disconnect " + get_logicalname(selected_device) + "from its current network.")
+                utils.header("WARNING", "Please disconnect " + get_logicalname(selected_device) + " from its current network.")
                 utils.getch()
                 #To replace with something that checks if the device is really disconnected
                 #Command to check: ifconfig $wlan_device | grep ip
@@ -168,7 +168,7 @@ def print_device_summary(device):
 
 #End possible interfering processes to WLAN device
 def terminate_services():
-    end_services = subprocess.Popen("sudo airmon-ng check kill", shell=True, stdout=subprocess.PIPE)
+    end_services = subprocess.Popen("sudo airmon-ng check kill", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, )
     end_services.wait()
     res, err = end_services.communicate()
     if end_services.returncode == 0:
@@ -183,7 +183,7 @@ def restart_services():
                     "sudo systemctl start NetworkManager.service"
                 ]
     for c in commands:
-        p = subprocess.Popen(c, shell=True, stdout=subprocess.PIPE)
+        p = subprocess.Popen(c, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, )
         p.wait()
         res, err = p.communicate()
         if p.returncode != 0:
@@ -209,7 +209,7 @@ def enable_mon(device):
     # some time, then it is assumed that the device does
     # not support monitor mode.
     
-    airmon_ng = subprocess.Popen("airmon-ng start " + logicalname, shell=True, stdout=subprocess.PIPE)
+    airmon_ng = subprocess.Popen("airmon-ng start " + logicalname, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, )
     airmon_ng.wait()
     res, err = airmon_ng.communicate()
     if airmon_ng.returncode != 0:
@@ -219,3 +219,13 @@ def enable_mon(device):
 #Disable monitor for specified device
 def disable_mon(device):
     return True
+
+#Check if previous connections are restored
+def check_connection():
+    check = subprocess.Popen("ifconfig | grep wlan", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, )
+    check.wait()
+    res, err = check.communicate()
+    if res.decode("utf-8") == "":
+        return False
+    return True
+    

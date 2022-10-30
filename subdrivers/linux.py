@@ -76,11 +76,11 @@ def run():
 
 def wifi_scan_capture(wlan_device):
     if wlan_device != None:
-        target = scan.get_target(wlan_device)
+        target = scan.get_target(wlan_device) #Find target WiFi network
         if target != None:
-            essid = target[0] #ssid
-            bssid = target[1] #mac-address
-            return capture.capture_handshake(wlan_device, target[1])
+            bssid = target["bssid"] #mac-address
+            essid = target["essid"] #ssid
+            return capture.capture_handshake(wlan_device, target)
         else:   
             print("No target WiFi selected!")
             utils.getch()
