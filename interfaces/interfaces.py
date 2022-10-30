@@ -103,31 +103,34 @@ def get_interface():
     if wifi_devices != None:
         invalid = True
         while invalid: #Assume user inputs as invalid
-            choices = ["1",str(len(wifi_devices)),str(len(wifi_devices)+1),"0"]
-            utils.header("WLAN Device Selection", "Select WLAN Device")
-            print_interfaces(wifi_devices)
-            print("")
-            print("Menu: ")
-            print(choices[0] + " to " + choices[1] + " - Device ID")
-            print(choices[2] + " - Refresh")
-            print(choices[3] + " - Exit")
-            choice = input("Enter choice: ")
-            if choice == "":
-                print()
-            elif choice == "0":
-                return None
-            elif int(choice) >= 1 and int(choice) <= len(wifi_devices):
-                selected_device = wifi_devices[int(choice)-1]
-                utils.header("WARNING", "Please disconnect " + get_logicalname(selected_device) + " from its current network.")
-                utils.getch()
-                #To replace with something that checks if the device is really disconnected
-                #Command to check: ifconfig $wlan_device | grep ip
-                #If result is empty, then it is disconnected
-                #Otherwise, it is still connected!
-                return selected_device
-            elif choice == choices[2]:
-                utils.header("Scanning WLAN devices...")
-                wifi_devices = scan()
+            try:
+                choices = ["1",str(len(wifi_devices)),str(len(wifi_devices)+1),"0"]
+                utils.header("WLAN Device Selection", "Select WLAN Device")
+                print_interfaces(wifi_devices)
+                print("")
+                print("Menu: ")
+                print(choices[0] + " to " + choices[1] + " - Device ID")
+                print(choices[2] + " - Refresh")
+                print(choices[3] + " - Exit")
+                choice = input("Enter choice: ")
+                if choice == "":
+                    print()
+                elif choice == "0":
+                    return None
+                elif int(choice) >= 1 and int(choice) <= len(wifi_devices):
+                    selected_device = wifi_devices[int(choice)-1]
+                    utils.header("WARNING", "Please disconnect " + get_logicalname(selected_device) + " from its current network.")
+                    utils.getch()
+                    #To replace with something that checks if the device is really disconnected
+                    #Command to check: ifconfig $wlan_device | grep ip
+                    #If result is empty, then it is disconnected
+                    #Otherwise, it is still connected!
+                    return selected_device
+                elif choice == choices[2]:
+                    utils.header("Scanning WLAN devices...")
+                    wifi_devices = scan()
+            except ValueError:
+                invalid = True
     else:
         utils.header("WLAN Device Selection", "No WLAN devices detected!")
         utils.getch()

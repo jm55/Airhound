@@ -16,7 +16,7 @@
             5. Windows Saved WiFi Passwords
 ============================================================
 
-WIFI SCAN & TARGET MODULE
+WPA SCAN & TARGET MODULE
 '''
 
 import subprocess
@@ -26,10 +26,10 @@ import utils.utils as utils
 import interfaces.interfaces as interface
 
 def get_target(device):
-    utils.header("Scan","Scan and Select target WiFi network.")
+    utils.header("WPA Scan + Capture","WPA Scan and Select target WiFi network.")
     interface.print_device_summary(device)
     print("")
-    utils.print_bar(len("Scan and Select target WiFi network."))
+    utils.print_bar(len("WPA  Scan and Select target WiFi network."))
 
     wifi_list = scan_wifi(device)
 

@@ -15,7 +15,8 @@
             4. WiFi DOS
             5. Windows Saved WiFi Passwords
 ============================================================
-WIFI HANDSHAKE CAPTURE MODULE
+
+WPA HANDSHAKE CAPTURE MODULE
 '''
 
 import subprocess
@@ -42,6 +43,8 @@ def capture_handshake(device, bssid:str):
     ask the user first before using deauth.
 
     After capture was done, save capture .pcap file and return filename/file.
+
+    It is optional to turn it into a .hccapx file but .pcap file shall suffice
     '''
     return str(None)
 

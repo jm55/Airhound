@@ -21,8 +21,10 @@ LINUX SUBDRIVER MODULE
 
 import utils.utils as utils
 import interfaces.interfaces as interface
-import scanning.wifi.scan as scan
-import scanning.wifi.capture as capture
+import scanning.wifi.wpascan as wpascan
+import scanning.wifi.wpacapture as wpacapture
+import scanning.wifi.wpsscan as wpsscan
+import scanning.wifi.wpscapture as wpscapture
 import deauth.deauth as deauth
 import time
 import json
@@ -33,7 +35,7 @@ import json
 def run():    
     wlan_device = None #type json; refer to interfaces.get_interface()
     capture_filename = None #type file
-    
+
     utils.confirm(utils.running_OS())
     invalid = True
     wlan_device = interface.get_interface()
@@ -44,7 +46,7 @@ def run():
                         "WiFi DOS", "Select WLAN Device","Exit"]
         descs = [
                     "WLAN Device Selected: " + str(interface.get_logicalname(wlan_device)),
-                    "Previous Captured File: " + str(capture_filename)
+                    "Previous Captured File: " + str(capture_filename),
                 ]
         utils.header("Tools Menu", descs)
         choice = utils.menu(int_choices, str_choices)
@@ -61,33 +63,54 @@ def run():
                                 )
                 else:
                     if choice == "1": #WIFI SCAN+CAPTURE
-                        capture_filename = wifi_scan_capture(wlan_device)
+                        mode_invalid = True
+                        while mode_invalid:
+                            utils.header("WiFi Scan + Capture","Select Mode")
+                            int_mode = ["1","2","0"]
+                            str_mode = ["WPA Search", "WPS Search", "Exit"]
+                            mode = utils.menu(int_mode, str_mode)
+                            if utils.valid_choice(mode, int_mode):
+                                mode_invalid = False
+                                if mode == "1":
+                                    capture_filename = wpa_scan_capture(wlan_device)
+                                elif mode == "2":
+                                    capture_filename = wps_scan_capture(wlan_device)
+                                elif mode == "0":
+                                    mode_invalid = False
+                            else:
+                                print("Invalid choice!")
+                                utils.getch()
                     elif choice == "3": #FULL SUITE (WIFI SCAN+CAPTURE & WIFI CRACKING)
                         print("Test: " + str_choices[int(choice)-1])
+                    
                     elif choice == "5": #WIFI DOS
                         print("Test: " + str_choices[int(choice)-1])
                         wifi_dos(wlan_device)
+                    
                     else:
-                        print("How did you get here??")
                         exit(1)
+            
             elif choice == "2": #WIFI CRACKING
                 print("Test: " + str_choices[int(choice)-1])
                 utils.yesNo("WiFi Cracking", "This function expects that you have a captured file already.", "Do you have a captured file?", False)
+            
             elif choice == "4": #WAP ADMIN ATTACK
                 print("Test: " + str_choices[int(choice)-1])
+            
             elif choice == "6": #SELECT WLAN DEVICE
                 wlan_device = interface.get_interface()
             print("")
-            utils.getch()
+
+            utils.getch("Checkpoint!\nPress Enter to continue...")
     exit(0)
 
-def wifi_scan_capture(wlan_device):
+def wpa_scan_capture(wlan_device):
     if wlan_device != None:
-        target = scan.get_target(wlan_device) #Find target WiFi network
+        target = wpascan.get_target(wlan_device) #Find target WiFi network
         if target != None:
             bssid = target["bssid"] #mac-address
             essid = target["essid"] #ssid
-            return capture.capture_handshake(wlan_device, target)
+            return wpacapture.capture_handshake(wlan_device, target)
         else:   
             print("No target WiFi selected!")
             utils.getch()
@@ -95,6 +118,9 @@ def wifi_scan_capture(wlan_device):
         utils.header(str_choices[0])
         print("Function not allowed.\nYou haven't selected a WLAN device.")
     return None #Return captured filename
+
+def wps_scan_capture(wlan_device):
+    print("wps_scan_capture")
 
 def wifi_dos(wlan_device):
     print("WiFi_DOS")

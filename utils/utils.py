@@ -195,12 +195,13 @@ def menu(int_choices:str, str_choices:list):
     ctr = 0
     for ctr in range(len(int_choices)):
         print(str(int_choices[ctr]) + " - " + str_choices[ctr])
+    print("")
     return input("Enter choice: ")
 
 #Checks if choice is valid from choices
-def valid_choice(choice, choices):
+def valid_choice(choice:str, choices:list):
     for c in choices:
-        if choice == c:
+        if choice == str(c):
             return True
     return False
 
