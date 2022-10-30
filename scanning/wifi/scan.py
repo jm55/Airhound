@@ -21,42 +21,40 @@ WIFI SCAN & TARGET MODULE
 
 import subprocess
 import utils.utils as utils
-import scanning.interfaces.interfaces as interface
+import interfaces.interfaces as interface
 
 def get_target(device):
     utils.header("Scan","Scan and Select target WiFi network.")
     interface.print_device_summary(device)
     print("")
     utils.print_bar(len("Scan and Select target WiFi network."))
+
+    wifi_list = scan_wifi(device)
     
-    #Use these device details however needed
+    return None
+
+def scan_wifi(device):
+    service_status = True
     device_logicalname = interface.get_logicalname(device)
     device_macaddress = interface.get_macaddress(device)
     device_driver = interface.get_driver(device)
-    '''
-    =======================
-    Airodump-ng Terminologies
-    =======================
-    ssid        = essid
-    mac-address = bssid 
-    channel     = channel
 
-    =======================================================================
-                                INSTRUCTIONS
-    =======================================================================
-    Implement any function that would return 
-    a list containing [ssid, mac-address] of
-    the selected/target WiFi network.
+    #Disable WLAN/Network Services
+    while service_status:
+        utils.header("Disabling possible interfering WLAN processes...")
+        service_status = interface.terminate_services()
+    utils.header("Possible interfering WLAN processes disabled!")
+    utils.getch()
+        
 
-    Use the device variable (containing raw JSON)
-    for device selection on airmon-ng and airodump-ng.
+    #Re-enable WLAN/Network Services
+    while not service_status:
+        utils.header("Disabling possible interfering WLAN processes...")
+        service_status = interface.restart_services()
+    utils.header("Possible interfering WLAN processes disabled!")
+    utils.getch()
 
-    You may have to consider executing 'sudo airmon-ng start <device>'
-    before running any airmon-ng scanning and airodump-ng capture commands.
-
-    If user has not selected a target WiFi network, return as None
-    Otherwise return target WiFi details in [ssid, mac-address, channel]
-    '''
+    #Return collected WiFi Networks
     return None
 
 #IMPLEMENT ANYTHING HERE ACCORDINGLY

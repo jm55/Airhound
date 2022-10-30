@@ -20,7 +20,7 @@ WIFI HANDSHAKE CAPTURE MODULE
 
 import subprocess
 import utils.utils as utils
-import scanning.interfaces.interfaces as interface
+import interfaces.interfaces as interface
 
 def capture_handshake(device, bssid:str):
     utils.header("Capture","Capture Handshake")

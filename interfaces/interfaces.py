@@ -118,7 +118,7 @@ def get_interface():
                 return None
             elif int(choice) >= 1 and int(choice) <= len(wifi_devices):
                 selected_device = wifi_devices[int(choice)-1]
-                utils.header("WARNING", "Please disconnect " + selected_device + "from its current network.")
+                utils.header("WARNING", "Please disconnect " + get_logicalname(selected_device) + "from its current network.")
                 utils.getch()
                 #To replace with something that checks if the device is really disconnected
                 #Command to check: ifconfig $wlan_device | grep ip
@@ -165,3 +165,57 @@ def print_device_summary(device):
     print("WLAN Logicalname: ".ljust(20) + summary[0])
     print("WLAN MAC Address: ".ljust(20) + summary[1])
     print("WLAN Driver: ".ljust(20) + summary[2])
+
+#End possible interfering processes to WLAN device
+def terminate_services():
+    end_services = subprocess.Popen("sudo airmon-ng check kill", shell=True, stdout=subprocess.PIPE)
+    end_services.wait()
+    res, err = end_services.communicate()
+    if end_services.returncode == 0:
+        return False #Service disabled successfully
+    else:
+        return True #Service not/partially disabled
+
+#Restart (possible) terminated services from terminate_services()
+def restart_services():
+    commands =  [
+                    "sudo systemctl start wpa_supplicant.service",
+                    "sudo systemctl start NetworkManager.service"
+                ]
+    for c in commands:
+        p = subprocess.Popen(c, shell=True, stdout=subprocess.PIPE)
+        p.wait()
+        res, err = p.communicate()
+        if p.returncode != 0:
+            return False
+    return True
+
+#Enable monitor mode for specified device
+def enable_mon(device):
+    logicalname = get_logicalname(device)
+    if logicalname == "":
+        return False
+    
+    # There is no way to directly determine if
+    # the device is in monitor mode despite 
+    # being set as such. It is possible
+    # that doing 'airmon-ng start <wlan>' will
+    # result to being named as 'wlan#' instead of
+    # the common expected 'wlan#mon'. 
+    # Thus, we'll just have to assume that it is 
+    # in monitor mode.
+    
+    # If ever that the scanning returns no results after
+    # some time, then it is assumed that the device does
+    # not support monitor mode.
+    
+    airmon_ng = subprocess.Popen("airmon-ng start " + logicalname, shell=True, stdout=subprocess.PIPE)
+    airmon_ng.wait()
+    res, err = airmon_ng.communicate()
+    if airmon_ng.returncode != 0:
+        return False
+    return True
+
+#Disable monitor for specified device
+def disable_mon(device):
+    return True

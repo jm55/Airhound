@@ -30,10 +30,9 @@ airmon-ng start $wlan_device
 airmon-ng check kill
 airmon-ng start $wlan_device
 
-#TO RESTART KILLED NETWORK SERVICES
-sudo service NetworkManager restart
-#or 
-sudo service NetworkManager start
+#TO RESTART (PROBABLE) KILLED NETWORK SERVICES
+sudo systemctl start wpa_supplicant.service
+sudo systemctl start NetworkManager.service
 
 #SCAN NETWORK AND DUMP INTO .CSV FILE
 sample_tempfilename = "2022-10-29-17-08-00" #name format = yyyy-mm-dd-hh-mm-ss.csv
@@ -42,7 +41,7 @@ airodump-ng $wlan_device --update 1 -w $sample_tempfilename -o csv
 #Better to execute command on a countdown then end subprocess afterwards.
 
 #Using the dumped .csv file, read the file and let the user choose which
-#WiFi network to target then return its ESSID/SSID, BSSID/MAC-Address, and Channel
+#WiFi network to target then return its ESSID/SSID, BSSID/MAC-Address, Power, and Channel
 
 : '
 SAMPLE .CSV OUTPUT

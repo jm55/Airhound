@@ -20,7 +20,7 @@ LINUX SUBDRIVER MODULE
 '''
 
 import utils.utils as utils
-import scanning.interfaces.interfaces as interface
+import interfaces.interfaces as interface
 import scanning.wifi.scan as scan
 import scanning.wifi.capture as capture
 import time

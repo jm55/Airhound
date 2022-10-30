@@ -19,7 +19,7 @@
 UTILITIES MODULE
 '''
 
-from operator import mod
+from datetime import datetime as dt
 import sys
 import os
 import platform
@@ -237,3 +237,11 @@ def yesNo(module:str, desc:str, question:str, explicit:bool):
 #Print JSON in a prettified manner.
 def printJSON(src):
     print(json.dump(src,indent=4))
+
+#Get raw now datetime
+def getDT():
+    return dt.now()
+
+#Get formatted now datetime as yyyy-mm-dd-hh-mm-ss
+def getFormattedDT():
+    return str(getDT.strftime("%Y-%m-%d-%H-%M-%S"))
