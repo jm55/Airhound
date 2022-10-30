@@ -1,0 +1,9 @@
+BSSID               Ch  dBm  WPS  Lck  Vendor    ESSID
+--------------------------------------------------------------------------------
+08:86:3B:30:8B:AC    1  -87  1.0  No   RealtekS  belkin.bac
+AC:84:C6:94:DA:08    2  -69  2.0  No   RalinkTe  LAB_NETWORK
+10:27:F5:D0:E9:7A    5  -75  2.0  No   AtherosC  Pir
+6C:5A:B0:4F:B2:12    5  -77  2.0  No   AtherosC  Pir
+10:27:F5:D0:DE:96    5  -75  2.0  No   AtherosC  Pir
+
+

