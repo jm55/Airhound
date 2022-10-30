@@ -144,7 +144,7 @@ def get_key(device, key):
 
 #Returns logical name of the device. Example: wlan0, wlan1, etc.
 def get_logicalname(device):
-    return get_key(device, "logicalname")
+    return str(get_key(device, "logicalname"))
 
 #Returns MAC Address of the device.
 def get_macaddress(device):

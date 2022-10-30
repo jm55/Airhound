@@ -100,8 +100,7 @@ def run():
             elif choice == "6": #SELECT WLAN DEVICE
                 wlan_device = interface.get_interface()
             print("")
-
-            utils.getch("Checkpoint!\nPress Enter to continue...")
+            utils.getch("Checkpoint: Main Menu\nPress Enter to continue...")
     exit(0)
 
 def wpa_scan_capture(wlan_device):
@@ -115,12 +114,16 @@ def wpa_scan_capture(wlan_device):
             print("No target WiFi selected!")
             utils.getch()
     else:
-        utils.header(str_choices[0])
         print("Function not allowed.\nYou haven't selected a WLAN device.")
     return None #Return captured filename
 
 def wps_scan_capture(wlan_device):
     print("wps_scan_capture")
+    if wlan_device != None:
+        target = wpsscan.get_target(wlan_device)
+    else:
+        print("Function not allowed.\nYou haven't selected a WLAN device.")
+
 
 def wifi_dos(wlan_device):
     print("WiFi_DOS")

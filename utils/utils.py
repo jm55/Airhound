@@ -246,7 +246,7 @@ def getDT():
 def getFormattedDT():
     return str(getDT().strftime("%Y-%m-%d-%H-%M-%S"))
 
-#CSV to 2D list
+#CSV to 2D list; Generic, can be used on all csv to 2D list conversions
 def csvToList(filepath:str):
     try:
         loc = filepath.rindex(".csv")
@@ -270,3 +270,61 @@ def checkFile(filepath:str):
 
 def renameFile(src:str, dst:str):
     rn = subprocess.run("mv " + src + " " + dst, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
+def parseWashOutput(filename):
+    wps_list = []
+    ctr = 0
+    with open(filename) as file:
+        while (line := file.readline().rstrip()):
+            print(line.split())
+            if ctr != 1:
+                wps_list.append(line.split())
+            ctr += 1
+    return wps_list
+
+#Returns a slimmed down version of raw inputted wifi_list from post airodump WiFi Scan
+def simplify_wifi_list(wifi_list: list, wps:False):
+    filtered = []
+    if wps:
+        #Format: [['BSSID', 'Ch', 'dBm', 'WPS', 'Lck', 'Vendor', 'ESSID']]
+        ctr = 1
+        while ctr < len(wifi_list):
+            wifi = wifi_list[ctr]
+            # Important Cols:   0-BSSID, 1-Channel
+            #                   2-Power, 6-ESSID
+            if(len(wifi) == 0):
+                break
+            else:
+                select = {
+                    "id":str(ctr).strip(),
+                    "bssid": wifi[0].strip(),
+                    "essid": wifi[6].strip(),
+                    "power": wifi[2].strip(),
+                    "channel": wifi[1].strip()
+                }
+                filtered.append(select)
+            ctr += 1
+    else:
+        ctr = 2
+        print("ID".ljust(4)+"MAC Address".ljust(21)+"SSID".ljust(36)+"Security".ljust(18)+"Cipher".ljust(21)+"Power (dBm)".ljust(13))
+        while ctr < len(wifi_list):
+            wifi = wifi_list[ctr]
+            # Important Cols:   0-BSSID, 3-Channel
+            #                   5-Privacy, 6-Cipher
+            #                   7-Authentication, 8-Power
+            #                   13-ESSID
+            if(len(wifi) == 0):
+                break
+            else:
+                select = {
+                    "id":str(ctr-1).strip(),
+                    "bssid": wifi[0].strip(),
+                    "essid": wifi[13].strip(),
+                    "privacy": wifi[5].strip(),
+                    "cipher": wifi[6].strip(),
+                    "power": wifi[8].strip(),
+                    "channel": wifi[3].strip()
+                }
+                filtered.append(select)
+            ctr += 1
+    return filtered
