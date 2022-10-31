@@ -70,9 +70,6 @@ def wifi_dos(device):
         
         process.kill()
 
-        #subprocess.Popen("ifconfig " + interface.get_logicalname(device) + " down", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).wait()
-        #subprocess.Popen("ifconfig " + interface.get_logicalname(device) + " up", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).wait()
-
         interface.disable_monitor(device)
     else:
         utils.header("WiFi DOS (Deauth) Attack", "Deauth Attack Cancelled!")

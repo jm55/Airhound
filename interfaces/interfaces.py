@@ -204,29 +204,12 @@ def enable_monitor(device, channel=""):
     if logicalname == "":
         return False
     
-    # There is no way to directly determine if
-    # the device is in monitor mode despite 
-    # being set as such. It is possible
-    # that doing 'airmon-ng start <wlan>' will
-    # result to being named as 'wlan#' instead of
-    # the common expected 'wlan#mon'. 
-    # Thus, we'll just have to assume that it is 
-    # in monitor mode.
-    
-    # If ever that the scanning returns no results after
-    # some time, then it is assumed that the device does
-    # not support monitor mode.
-    
-    #airmon_ng = subprocess.Popen("airmon-ng start " + logicalname + " " + channel, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    #airmon_ng.wait()
-    #res, err = airmon_ng.communicate()
-    
     steps = ["ifconfig " + logicalname + " down"]
     if channel != "":
         steps.append("iwconfig " + logicalname + " mode monitor channel " + channel)
     else:
         steps.append("iwconfig " + logicalname + " mode monitor")
-        
+
     for s in steps:
         process = subprocess.Popen(s, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         process.wait()
@@ -248,12 +231,6 @@ def disable_monitor(device):
     logicalname = get_logicalname(device)
     if logicalname == "":
         return False
-    
-    #airmon_ng = subprocess.Popen("airmon-ng stop " + logicalname, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    #airmon_ng.wait()
-    #res, err = airmon_ng.communicate()
-    #if airmon_ng.returncode != 0:
-    #    return False
 
     steps = [
                 "ifconfig " + logicalname + " down",
@@ -268,8 +245,8 @@ def disable_monitor(device):
             return False
 
     '''
-        CHECK device["logicalname"] IF IT CONTAINS 'mon' SUFFIX
-        REMOVE IF SO
+        CHECK device["logicalname"] 
+        IF IT CONTAINS 'mon' SUFFIX, REMOVE IF SO
     '''
     
     return True, device
