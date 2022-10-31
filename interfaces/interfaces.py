@@ -220,9 +220,16 @@ def enable_monitor(device, channel=""):
     airmon_ng = subprocess.Popen("airmon-ng start " + logicalname + " " + channel, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     airmon_ng.wait()
     res, err = airmon_ng.communicate()
+    
+    '''
+        UPDATE device["logicalname"] HERE IF ISSUE REGARDING THE 'mon' SUFFIX ARISES
+        CHECK IF device LOGICALNAME CHANGED AFTER airmon_ng SUBPROCESS TO ONE WITH 'mon' SUFFIX
+        AND UPDATE ACCORDINGLY
+    '''
+    
     if airmon_ng.returncode != 0:
         return False
-    return True
+    return True, device
 
 #Disable monitor for specified device
 def disable_monitor(device):
@@ -234,7 +241,13 @@ def disable_monitor(device):
     res, err = airmon_ng.communicate()
     if airmon_ng.returncode != 0:
         return False
-    return True
+
+    '''
+        CHECK device["logicalname"] IF IT CONTAINS 'mon' SUFFIX
+        REMOVE IF SO
+    '''
+    
+    return True, device
 
 #Check if previous connections are restored
 def check_connection():

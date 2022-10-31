@@ -61,8 +61,9 @@ def wifi_dos(device):
         
         utils.header("Loading WiFi DOS attack...")
         interface.terminate_services()
-        interface.enable_monitor(device, channel=target["channel"])
-        
+        enable = interface.enable_monitor(device, channel=target["channel"])
+        device = enable[1]
+
         process = subprocess.Popen(process_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
         utils.header("WiFi DOS (Deauth) Attack", ["Deauth Attack Ongoing...","Deauth PID: " + str(process.pid)])

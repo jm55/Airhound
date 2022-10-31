@@ -85,7 +85,9 @@ def scan_wifi(device):
     #Disable WLAN/Network Services
     while service_status:
         utils.header("Loading monitoring mode...")
-        service_status = interface.terminate_services() and interface.enable_monitor(device)
+        enable = interface.enable_monitor(device)
+        device = enable[1]
+        service_status = interface.terminate_services() and enable[0]
     utils.header("Possible interfering WLAN processes disabled!")
     utils.getch()
 
