@@ -76,18 +76,18 @@ def get_target(device):
     return None
 
 def scan_wifi(device):
-    service_status = True
+    service_status = False
     device_logicalname = interface.get_logicalname(device)
     device_macaddress = interface.get_macaddress(device)
     device_driver = interface.get_driver(device)
     wps_list= []
 
     #Disable WLAN/Network Services
-    while service_status:
+    while not service_status:
         utils.header("Loading monitoring mode...")
         enable = interface.enable_monitor(device)
         device = enable[1]
-        service_status = interface.terminate_services() and enable[0]
+        service_status = enable[0]
     utils.header("Possible interfering WLAN processes disabled!")
     utils.getch()
 
@@ -115,7 +115,7 @@ def scan_wifi(device):
 
     while not service_status:
         utils.header("Ending monitoring mode...")
-        service_status = interface.disable_monitor(device) and interface.restart_services() and interface.check_connection()
+        service_status = interface.disable_monitor(device) and interface.check_connection()
     utils.header("WLAN/Network Services Restored!")
     utils.getch()
 

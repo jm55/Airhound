@@ -18,3 +18,28 @@
 
 WPS HANDSHAKE CAPTURE MODULE
 '''
+
+def capture_handshake(device, bssid:str):
+    utils.header("WPS Capture","Capture Handshake")
+    
+    #Use these device details however needed
+    device_logicalname = interface.get_logicalname(device)
+    device_macaddress = interface.get_macaddress(device)
+    device_driver = interface.get_driver(device)
+    '''
+    =========================================================================
+                                INSTRUCTIONS
+    =========================================================================
+    Do the airodump-ng command here where you capture the handshake 
+    being transmitted over WiFi.
+
+    You may also include a simultaneous deauth attack as you capture since
+    capturing handshakes require hosts to do an attempt to connect to WiFi 
+    but can be noticed by the victims as an anomaly during an attack, thus
+    ask the user first before using deauth.
+
+    After capture was done, save capture .pcap file and return filename/file.
+
+    It is optional to turn it into a .hccapx file but .pcap file shall suffice
+    '''
+    return str(None)

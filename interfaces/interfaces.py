@@ -217,9 +217,22 @@ def enable_monitor(device, channel=""):
     # some time, then it is assumed that the device does
     # not support monitor mode.
     
-    airmon_ng = subprocess.Popen("airmon-ng start " + logicalname + " " + channel, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    airmon_ng.wait()
-    res, err = airmon_ng.communicate()
+    #airmon_ng = subprocess.Popen("airmon-ng start " + logicalname + " " + channel, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    #airmon_ng.wait()
+    #res, err = airmon_ng.communicate()
+    
+    steps = ["ifconfig " + logicalname + " down"]
+    if channel != "":
+        steps.append("iwconfig " + logicalname + " mode monitor channel " + channel)
+    else:
+        steps.append("iwconfig " + logicalname + " mode monitor")
+        
+    for s in steps:
+        process = subprocess.Popen(s, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        process.wait()
+        res, err = process.communicate()
+        if process.returncode != 0:
+            return False
     
     '''
         UPDATE device["logicalname"] HERE IF THE 'mon' SUFFIX IS DETECTED AFTER AIRMON-NG STARTS
@@ -228,8 +241,6 @@ def enable_monitor(device, channel=""):
         AND UPDATE ACCORDINGLY
     '''
     
-    if airmon_ng.returncode != 0:
-        return False
     return True, device
 
 #Disable monitor for specified device
@@ -237,11 +248,24 @@ def disable_monitor(device):
     logicalname = get_logicalname(device)
     if logicalname == "":
         return False
-    airmon_ng = subprocess.Popen("airmon-ng stop " + logicalname, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    airmon_ng.wait()
-    res, err = airmon_ng.communicate()
-    if airmon_ng.returncode != 0:
-        return False
+    
+    #airmon_ng = subprocess.Popen("airmon-ng stop " + logicalname, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    #airmon_ng.wait()
+    #res, err = airmon_ng.communicate()
+    #if airmon_ng.returncode != 0:
+    #    return False
+
+    steps = [
+                "ifconfig " + logicalname + " down",
+                "iwconfig " + logicalname + " mode managed "
+                "ifconfig " + logicalname
+            ]
+    for s in steps:
+        process = subprocess.Popen(s, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        process.wait()
+        res, err = process.communicate()
+        if process.returncode != 0:
+            return False
 
     '''
         CHECK device["logicalname"] IF IT CONTAINS 'mon' SUFFIX

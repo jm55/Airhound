@@ -60,7 +60,6 @@ def wifi_dos(device):
         process_command = deauth_wifi_command(target, device, target_host, target_host == "")
         
         utils.header("Loading WiFi DOS attack...")
-        interface.terminate_services()
         enable = interface.enable_monitor(device, channel=target["channel"])
         device = enable[1]
 
@@ -75,7 +74,6 @@ def wifi_dos(device):
         #subprocess.Popen("ifconfig " + interface.get_logicalname(device) + " up", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).wait()
 
         interface.disable_monitor(device)
-        interface.restart_services()
     else:
         utils.header("WiFi DOS (Deauth) Attack", "Deauth Attack Cancelled!")
 

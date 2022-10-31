@@ -24,7 +24,7 @@ import utils.utils as utils
 import interfaces.interfaces as interface
 
 def capture_handshake(device, bssid:str):
-    utils.header("Capture","Capture Handshake")
+    utils.header("WPA Capture","Capture Handshake")
     
     #Use these device details however needed
     device_logicalname = interface.get_logicalname(device)
