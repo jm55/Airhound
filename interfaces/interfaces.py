@@ -199,7 +199,7 @@ def restart_services():
     return True
 
 #Enable monitor mode for specified device
-def enable_mon(device, channel=""):
+def enable_monitor(device, channel=""):
     logicalname = get_logicalname(device)
     if logicalname == "":
         return False
@@ -225,7 +225,15 @@ def enable_mon(device, channel=""):
     return True
 
 #Disable monitor for specified device
-def disable_mon(device):
+def disable_monitor(device):
+    logicalname = get_logicalname(device)
+    if logicalname == "":
+        return False
+    airmon_ng = subprocess.Popen("airmon-ng stop " + logicalname, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    airmon_ng.wait()
+    res, err = airmon_ng.communicate()
+    if airmon_ng.returncode != 0:
+        return False
     return True
 
 #Check if previous connections are restored

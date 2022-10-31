@@ -22,6 +22,7 @@ WPA SCAN & TARGET MODULE
 import subprocess
 import re
 import time
+import os
 import utils.utils as utils
 import interfaces.interfaces as interface
 
@@ -73,32 +74,13 @@ def scan_wifi(device):
 
     #Disable WLAN/Network Services
     while service_status:
-        utils.header("Disabling possible interfering WLAN processes...")
-        service_status = interface.terminate_services()
+        utils.header("Loading monitoring mode...")
+        service_status = interface.terminate_services() and interface.enable_monitor(device)
     utils.header("Possible interfering WLAN processes disabled!")
     utils.getch()
     
     #Ask for min time for scanning; Max at 60seconds
-    valid = False
-    countdown = -1
-    min = 10
-    max = 120
-    while not valid:
-        utils.header("WiFi WPA Scan Time")
-        try:
-            entry = int(input("Enter time (sec) to scan (limited " + str(min) + "s to " + str(max) + "s): "))
-            if entry >= min and entry < max:
-                countdown = entry
-                valid = True
-            elif entry > max:
-                utils.header("Time entered exceeds max limit!","Time set to " + str(max) + " seconds.")
-                countdown = max
-                valid = True
-            elif entry < min:
-                utils.header("Invalid time, please try again!")
-                utils.getch()
-        except ValueError:
-            valid = False
+    countdown = utils.set_countdown("WiFi (WPA) Scan Time", 10, 120)
 
     #Prepare command
     filename = utils.getFormattedDT()
@@ -108,10 +90,7 @@ def scan_wifi(device):
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, bufsize=1)
     
     #Terminate at specified time; Does not indicate networks scanned.
-    while countdown:
-        utils.header("Scanning Network...", ["Mode: WPA","Time Left: " + str(countdown) + " seconds"])
-        time.sleep(1)
-        countdown -= 1
+    utils.display_countdown("Scanning Network...", "Mode: WPA", countdown)
     process.kill()
 
     #Rename file to remove <filename>-xx.csv suffix
@@ -122,13 +101,14 @@ def scan_wifi(device):
         print("Error occured while loading file, exiting...")
         exit(1)
 
-    #Print collected information
+    #Print collected information and cleanup temp files
     wpa_list = utils.csvToList(filename)
+    os.remove(filename + ".csv")
 
     #Re-enable WLAN/Network Services
     while not service_status:
-        utils.header("Re-enabling possibly killed WLAN processes...")
-        service_status = interface.restart_services() and interface.check_connection()
+        utils.header("Ending monitoring mode...")
+        service_status = interface.disable_monitor(device) and interface.restart_services() and interface.check_connection()
     utils.header("WLAN/Network Services Restored!")
     utils.getch()
 

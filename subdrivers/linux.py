@@ -52,6 +52,9 @@ def run():
         choice = utils.menu(int_choices, str_choices)
         if utils.valid_choice(choice, int_choices):
             if choice == "0": #EXIT
+                if wlan_device != None:
+                    interface.disable_monitor(wlan_device)
+                interface.restart_services()
                 utils.cls()
                 exit(0)
             elif choice == "1" or choice == "3" or choice == "5":
@@ -122,6 +125,7 @@ def wps_scan_capture(wlan_device):
 def wifi_dos(wlan_device):
     if check_wlan(wlan_device):
         deauth.wifi_dos(wlan_device)
+        utils.display_countdown("WiFi DOS (Deauth) Attack", "Stopping deauth attack...", 20)
     else:
         print("Function not allowed.\nYou haven't selected a WLAN device.")
 

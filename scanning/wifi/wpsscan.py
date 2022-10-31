@@ -84,32 +84,13 @@ def scan_wifi(device):
 
     #Disable WLAN/Network Services
     while service_status:
-        utils.header("Disabling possible interfering WLAN processes...")
-        service_status = interface.terminate_services()
+        utils.header("Loading monitoring mode...")
+        service_status = interface.terminate_services() and interface.enable_monitor(device)
     utils.header("Possible interfering WLAN processes disabled!")
     utils.getch()
 
-    #Ask for min time for scanning; Max at 60seconds
-    valid = False
-    countdown = -1
-    min = 60
-    max = 240
-    while not valid:
-        utils.header("WiFi WPS Scan Time")
-        try:
-            entry = int(input("Enter time (sec) to scan (limited " + str(min) + "s to " + str(max) + "s): "))
-            if entry >= min and entry < max:
-                countdown = entry
-                valid = True
-            elif entry > max:
-                utils.header("Time entered exceeds max limit!","Time set to " + str(max) + " seconds.")
-                countdown = max
-                valid = True
-            elif entry < min:
-                utils.header("Invalid time, please try again!")
-                utils.getch()
-        except ValueError:
-            valid = False
+    #Ask for min time for scanning
+    countdown = utils.set_countdown("WiFi (WPA) Scan Time", 30, 240)
 
     #Prepare command
     filename = utils.getFormattedDT()
@@ -119,20 +100,22 @@ def scan_wifi(device):
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, bufsize=1)
 
     #Terminate at specified time; Does not indicate networks scanned.
-    while countdown:
-        utils.header("Scanning Network...", ["Mode: WPS","Time Left: " + str(countdown) + " seconds"])
-        time.sleep(1)
-        countdown -= 1
+    utils.display_countdown("Scanning Network...","Mode: WPS", countdown)
     process.kill()
 
     #Rename file to remove <filename>-xx.csv suffix
     #Show as "Loading..."
     utils.header("Loading results...")
 
-    #Print collected information
+    #Print collected information and cleanup temp files
     wps_list = utils.parseWashOutput(filename + ".txt")
-
     os.remove(filename + ".txt")
+
+    while not service_status:
+        utils.header("Ending monitoring mode...")
+        service_status = interface.disable_monitor(device) and interface.restart_services() and interface.check_connection()
+    utils.header("WLAN/Network Services Restored!")
+    utils.getch()
 
     return wps_list
 

@@ -27,6 +27,7 @@ import subprocess
 import json
 import csv
 import re
+import time
 
 title = "NSSECU2 Hacking Tool"
 test = ["1","2","3"]
@@ -333,3 +334,37 @@ def simplify_wifi_list(wifi_list: list, wps:False):
 
 def valid_mac(mac_address:str): #https://stackoverflow.com/a/7629690
     return re.match("[0-9a-f]{2}([-:]?)[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$", mac_address.lower())
+
+def set_countdown(str_header, min, max):
+    valid = False
+    countdown = -1
+    while not valid:
+        header(str_header)
+        try:
+            entry = int(input("Enter time (sec) to scan (limited " + str(min) + "s to " + str(max) + "s): "))
+            if entry >= min and entry < max:
+                countdown = entry
+                valid = True
+            elif entry > max:
+                header(str_header ,"Time entered exceeds max limit!","Time set to " + str(max) + " seconds.")
+                countdown = max
+                valid = True
+            elif entry < min:
+                header(str_header, "Invalid time, please try again!")
+                getch()
+        except ValueError:
+            valid = False
+    return countdown
+
+def display_countdown(str_header, desc, countdown):
+    while countdown:
+        desc_list = []
+        time_left = "Time left: " + str(countdown) + " second(s)"
+        if type(desc) == list:
+            desc_list = desc
+            desc_list.append(time_left)
+        else:
+            desc_list = [desc, time_left]
+        header(str_header, desc_list)
+        time.sleep(1)
+        countdown -= 1

