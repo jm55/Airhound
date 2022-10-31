@@ -222,7 +222,8 @@ def enable_monitor(device, channel=""):
     res, err = airmon_ng.communicate()
     
     '''
-        UPDATE device["logicalname"] HERE IF ISSUE REGARDING THE 'mon' SUFFIX ARISES
+        UPDATE device["logicalname"] HERE IF THE 'mon' SUFFIX IS DETECTED AFTER AIRMON-NG STARTS
+        
         CHECK IF device LOGICALNAME CHANGED AFTER airmon_ng SUBPROCESS TO ONE WITH 'mon' SUFFIX
         AND UPDATE ACCORDINGLY
     '''
