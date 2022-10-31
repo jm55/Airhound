@@ -23,11 +23,7 @@ import subdrivers.windows as win
 
 #Main Function
 def main():
-    if not oath():
-        exit(0)
-
     utils.about()
-
     if utils.linux_check():
         linux()
     elif utils.win_check():
@@ -46,6 +42,8 @@ def oath():
 #Delegates Linux execution
 def linux():
     if utils.root_check():
+        if not oath():
+            exit(0)
         lin.run()
     else:
         utils.header("SUDO REQUIRED","Application must run in root!")
@@ -54,6 +52,8 @@ def linux():
 
 #Delegates Windows execution
 def windows():
+    if not oath():
+        exit(0)
     win.run()
     
 if __name__ == "__main__":
