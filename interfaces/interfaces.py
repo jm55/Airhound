@@ -144,6 +144,10 @@ def get_key(device, key):
 
 #Returns logical name of the device. Example: wlan0, wlan1, etc.
 def get_logicalname(device):
+    #MAY INCLUDE CODE THAT WOULD CHECK IF DEVICE LOGICALNAME HAS *mon SUFFIX
+    #MAYBE DO COMMAND: sudo airmon-ng | grep $device["logicalname"] ?
+    #IF IT IS NOT "" THEN THERE IS A DEVICE WITH *mon SUFFIX, THUS RETURN device["logicalname"] + "mon"
+    #ELSE, RETURN AS IS
     return str(get_key(device, "logicalname"))
 
 #Returns MAC Address of the device.
@@ -195,7 +199,7 @@ def restart_services():
     return True
 
 #Enable monitor mode for specified device
-def enable_mon(device):
+def enable_mon(device, channel=""):
     logicalname = get_logicalname(device)
     if logicalname == "":
         return False
@@ -213,7 +217,7 @@ def enable_mon(device):
     # some time, then it is assumed that the device does
     # not support monitor mode.
     
-    airmon_ng = subprocess.Popen("airmon-ng start " + logicalname, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    airmon_ng = subprocess.Popen("airmon-ng start " + logicalname + " " + channel, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     airmon_ng.wait()
     res, err = airmon_ng.communicate()
     if airmon_ng.returncode != 0:

@@ -28,10 +28,10 @@ import json
 
 ##Scan for WiFi (WPS) using WLAN device (device) and return target WiFi based on user selection
 def get_target(device):
-    utils.header("WiFi (WPS) Scan + Capture", "Do note that this tool may not work depending conditions not suitable for \'wash\' to run.")
+    utils.header("WiFi Scan + Capture", "Do note that this tool may not work depending conditions not suitable for \'wash\' to run.")
     utils.getch()
 
-    utils.header("WiFi (WPS) Scan + Capture", "WPS Scan and Select target WiFi network.")
+    utils.header("WiFi Scan + Capture", "Scan and Select target WiFi network.")
     interface.print_device_summary(device)
     print("")
     utils.print_bar(len("WPS Scan and Select target WiFi network."))
@@ -40,23 +40,23 @@ def get_target(device):
     while rescan:
         #wps_list = scan_wifi(device)
         wps_list = utils.parseWashOutput("others/test/wash.txt")
-        utils.header("WiFi (WPS) Scan + Capture","WPS Scan Finished")
+        utils.header("WiFi Scan + Capture","WiFi Scan Finished")
         if len(wps_list) == 1:
-            utils.header("WiFi (WPS) Scan + Capture", 
+            utils.header("WiFi Scan + Capture", 
                             [
-                                "WPS Scan failed to find WPS WiFi networks",
+                                "WiFi (WPS) Scan failed to find WiFi networks",
                                 "You may need to replug your WLAN device and reconfigure WLAN selection."
                             ]
                         )
             utils.getch()
-            if not utils.yesNo("WiFi (WPS) Scan + Capture", question="Do you want to do a rescan?", explicit=False):
+            if not utils.yesNo("WiFi Scan + Capture", question="Do you want to do a rescan?", explicit=False):
                 rescan = False
         else:
             rescan = False
             invalid = True
             target_id = -1
             while invalid:
-                utils.header("WiFi (WPS) Scan + Capture","WPS Scan Finished")
+                utils.header("WiFi Scan + Capture","WiFi Scan Finished")
                 filtered_list = utils.simplify_wifi_list(wps_list, True)
                 pretty_print(filtered_list)
                 print("")
@@ -120,7 +120,7 @@ def scan_wifi(device):
 
     #Terminate at specified time; Does not indicate networks scanned.
     while countdown:
-        utils.header("Scanning Network...", ["Mode: WPS","\n","Time Left: " + str(countdown) + " seconds"])
+        utils.header("Scanning Network...", ["Mode: WPS","Time Left: " + str(countdown) + " seconds"])
         time.sleep(1)
         countdown -= 1
     process.kill()

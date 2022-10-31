@@ -52,6 +52,7 @@ def run():
         choice = utils.menu(int_choices, str_choices)
         if utils.valid_choice(choice, int_choices):
             if choice == "0": #EXIT
+                utils.cls()
                 exit(0)
             elif choice == "1" or choice == "3" or choice == "5":
                 if wlan_device == None:
@@ -82,29 +83,24 @@ def run():
                                 utils.getch()
                     elif choice == "3": #FULL SUITE (WIFI SCAN+CAPTURE & WIFI CRACKING)
                         print("Test: " + str_choices[int(choice)-1])
-                    
                     elif choice == "5": #WIFI DOS
                         print("Test: " + str_choices[int(choice)-1])
                         wifi_dos(wlan_device)
-                    
                     else:
                         exit(1)
-            
             elif choice == "2": #WIFI CRACKING
                 print("Test: " + str_choices[int(choice)-1])
                 utils.yesNo("WiFi Cracking", "This function expects that you have a captured file already.", "Do you have a captured file?", False)
-            
             elif choice == "4": #WAP ADMIN ATTACK
                 print("Test: " + str_choices[int(choice)-1])
             
             elif choice == "6": #SELECT WLAN DEVICE
                 wlan_device = interface.get_interface()
-            print("")
             utils.getch("Checkpoint: Main Menu\nPress Enter to continue...")
     exit(0)
 
 def wpa_scan_capture(wlan_device):
-    if wlan_device != None:
+    if check_wlan(wlan_device):
         target = wpascan.get_target(wlan_device) #Find target WiFi network
         if target != None:
             bssid = target["bssid"] #mac-address
@@ -118,12 +114,19 @@ def wpa_scan_capture(wlan_device):
     return None #Return captured filename
 
 def wps_scan_capture(wlan_device):
-    print("wps_scan_capture")
-    if wlan_device != None:
+    if check_wlan(wlan_device):
         target = wpsscan.get_target(wlan_device)
     else:
         print("Function not allowed.\nYou haven't selected a WLAN device.")
 
-
 def wifi_dos(wlan_device):
-    print("WiFi_DOS")
+    if check_wlan(wlan_device):
+        deauth.wifi_dos(wlan_device)
+    else:
+        print("Function not allowed.\nYou haven't selected a WLAN device.")
+
+def check_wlan(wlan_device):
+    if wlan_device != None:
+        return True
+    else:
+        return False

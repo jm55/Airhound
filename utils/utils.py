@@ -26,6 +26,8 @@ import platform
 import subprocess
 import json
 import csv
+import re
+
 title = "NSSECU2 Hacking Tool"
 test = ["1","2","3"]
 about_content = [   "==============================================================", 
@@ -328,3 +330,6 @@ def simplify_wifi_list(wifi_list: list, wps:False):
                 filtered.append(select)
             ctr += 1
     return filtered
+
+def valid_mac(mac_address:str): #https://stackoverflow.com/a/7629690
+    return re.match("[0-9a-f]{2}([-:]?)[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$", mac_address.lower())

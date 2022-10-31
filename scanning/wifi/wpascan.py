@@ -27,10 +27,10 @@ import interfaces.interfaces as interface
 
 #Scan for WiFi (WPA) using WLAN device (device) and return target WiFi based on user selection
 def get_target(device):
-    utils.header("WiFi (WPA) Scan + Capture","WPA Scan and Select target WiFi network.")
+    utils.header("WiFi Scan + Capture","Scan and Select target WiFi network.")
     interface.print_device_summary(device)
     print("")
-    utils.print_bar(len("WPA  Scan and Select target WiFi network."))
+    utils.print_bar(len("Scan and Select target WiFi network."))
 
     wpa_list = scan_wifi(device)
 
@@ -47,7 +47,7 @@ def get_target(device):
     else:
         invalid = True
         while invalid:
-            utils.header("WiFi (WPA) Scan + Capture","WPA Scan Finished!")
+            utils.header("WiFi Scan + Capture","WiFi Scan Finished!")
             pretty_print(filtered_list)
             print("")
             try:
@@ -109,7 +109,7 @@ def scan_wifi(device):
     
     #Terminate at specified time; Does not indicate networks scanned.
     while countdown:
-        utils.header("Scanning Network...", ["Mode: WPA","\n","Time Left: " + str(countdown) + " seconds"])
+        utils.header("Scanning Network...", ["Mode: WPA","Time Left: " + str(countdown) + " seconds"])
         time.sleep(1)
         countdown -= 1
     process.kill()
