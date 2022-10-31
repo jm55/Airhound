@@ -25,6 +25,7 @@ import time
 import utils.utils as utils
 import interfaces.interfaces as interface
 
+#Scan for WiFi (WPA) using WLAN device (device) and return target WiFi based on user selection
 def get_target(device):
     utils.header("WiFi (WPA) Scan + Capture","WPA Scan and Select target WiFi network.")
     interface.print_device_summary(device)
@@ -62,8 +63,7 @@ def get_target(device):
             except ValueError:
                 invalid = True
 
-
-
+#Delegates WiFi scanning for WPA; Uses airodump-ng
 def scan_wifi(device):
     service_status = True
     device_logicalname = interface.get_logicalname(device)

@@ -26,6 +26,7 @@ import time
 import os
 import json
 
+##Scan for WiFi (WPS) using WLAN device (device) and return target WiFi based on user selection
 def get_target(device):
     utils.header("WiFi (WPS) Scan + Capture", "Do note that this tool may not work depending conditions not suitable for \'wash\' to run.")
     utils.getch()
@@ -135,6 +136,7 @@ def scan_wifi(device):
 
     return wps_list
 
+#Prints the filtered list accordingly
 def pretty_print(filtered_list:str):
     print("ID".ljust(4)+"MAC Address".ljust(21)+"SSID".ljust(36)+"Power (dBm)".ljust(13))
     for wifi in filtered_list:
