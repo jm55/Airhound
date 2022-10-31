@@ -21,10 +21,10 @@ LINUX SUBDRIVER MODULE
 
 import utils.utils as utils
 import interfaces.interfaces as interface
-import scanning.wifi.wpascan as wpascan
-import scanning.wifi.wpacapture as wpacapture
-import scanning.wifi.wpsscan as wpsscan
-import scanning.wifi.wpscapture as wpscapture
+import wifi.scanning.wpascan as wpascan
+import wifi.capture.wpacapture as wpacapture
+import wifi.scanning.wpsscan as wpsscan
+import wifi.capture.wpscapture as wpscapture
 import deauth.deauth as deauth
 import time
 import json

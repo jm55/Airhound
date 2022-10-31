@@ -20,7 +20,7 @@ DEAUTHENTICATION MODULE
 '''
 
 import interfaces.interfaces as interface
-import scanning.wifi.wpascan as wpascan
+import wifi.scanning.wpascan as wpascan
 import utils.utils as utils
 import subprocess
 import os
