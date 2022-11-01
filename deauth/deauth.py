@@ -36,7 +36,7 @@ def wifi_dos(device):
     target_host = ""
 
     invalid_mac = True
-    if utils.yesNo("WiFi DOS (Deauth) Attack","Configure WiFi Deauth Parameters","Enable Host Specific Mode?", False):
+    if utils.yesNo("WiFi DOS (Deauth) Attack","Configure WiFi Deauth Parameters","Use Host Specific Mode?", False):
         while invalid_mac:
             utils.header("WiFi DOS (Deauth) Attack", "Host Specific Mode Configuration")
             target_host = input("Enter MAC address of target device (Fformat: AA:BB:CC:DD:EE:FF): ").upper()
@@ -44,7 +44,7 @@ def wifi_dos(device):
                 invalid_mac = False
         utils.header("WiFi DOS (Deauth) Attack", "Note that configuration is set to Host Specific Mode mode and will target " + target_host.upper() + ".")
     else:
-        utils.header("WiFi DOS (Deauth) Attack", "Note that configuration for WiFi Deauth Attack will be noisy.")
+        utils.header("WiFi DOS (Deauth) Attack", "Note that this configuration won't be as effective as using Host Specific Mode.")
     utils.getch()
 
     target_descs = [
@@ -55,8 +55,8 @@ def wifi_dos(device):
                 "Host Specific Mode: " + str(not(target_host == "")),
                 "Target Host: " + target_host
             ]
-    if utils.yesNo("WiFi DOS (Deauth) Attack", target_descs, "Start Deauth Attack?", False):        
-        utils.header("WiFi DOS (Deauth) Attack", "Deauth Attack Starting...")
+    if utils.yesNo("WiFi DOS (Deauth) Attack", target_descs, "Start WiFi DOS Attack?", False):        
+        utils.header("WiFi DOS (Deauth) Attack", "WiFi DOS Attack Starting...")
         process_command = deauth_wifi_command(target, device, target_host, target_host == "")
         
         utils.header("Loading WiFi DOS attack...")
@@ -65,14 +65,14 @@ def wifi_dos(device):
 
         process = subprocess.Popen(process_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
-        utils.header("WiFi DOS (Deauth) Attack", ["Deauth Attack Ongoing...","Deauth PID: " + str(process.pid)])
-        utils.getch("Press enter to stop WiFi Deauth Attack...")
+        utils.header("WiFi DOS (Deauth) Attack", ["WiFi DOS Attack Ongoing...","WiFi DOS PID: " + str(process.pid)])
+        utils.getch("Press enter to stop WiFi DOS Attack...")
         
         process.kill()
 
         interface.disable_monitor(device)
     else:
-        utils.header("WiFi DOS (Deauth) Attack", "Deauth Attack Cancelled!")
+        utils.header("WiFi DOS (Deauth) Attack", "WiFi DOS Attack Cancelled!")
 
 #Returns deauth WiFi command to be executed.
 def deauth_wifi_command(wifi:dict, device, host_macaddress:"", host_mode=False):

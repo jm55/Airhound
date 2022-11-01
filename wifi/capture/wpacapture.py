@@ -22,6 +22,9 @@ WPA HANDSHAKE CAPTURE MODULE
 import subprocess
 import utils.utils as utils
 import interfaces.interfaces as interface
+import deauth.deauth as deauth
+
+global dos
 
 def capture_handshake(device, bssid:str):
     utils.header("WPA Capture","Capture Handshake")
@@ -46,6 +49,7 @@ def capture_handshake(device, bssid:str):
 
     It is optional to turn it into a .hccapx file but .pcap file shall suffice
     '''
+
     return str(None)
 
 #IMPLEMENT ANYTHING HERE ACCORDINGLY
