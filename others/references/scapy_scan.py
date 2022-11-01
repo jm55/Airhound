@@ -1,7 +1,10 @@
+#MODIFIED   
 #https://www.youtube.com/watch?v=DFTwB2nAexs
 
 import scapy.all as scapy
 import re
+import os
+import sys
 
 ip_add_range_pattern = re.compile("^(?:[0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]*$")
 
@@ -11,4 +14,8 @@ while True:
         print(f"{ip_add_range_entered} is a valid ip address range")
         break
 
+sys.stdout = open(os.devnull, 'w') #SUPPRESS PRINTOUTS
 arp_result = scapy.arping(ip_add_range_entered)
+sys.stdout = sys.__stdout__ #RESTORE PRINTOUTS
+
+print(type(arp_result))
