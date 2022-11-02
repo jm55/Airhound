@@ -34,21 +34,18 @@ import json
 #After each function has been completed, please return to this function (within the while-loop)
 def run():    
     wlan_device = None #type json; refer to interfaces.get_interface()
-    capture_filename = None #type file
+    capture_filename = None #type str
 
     utils.confirm(utils.running_OS())
     invalid = True
     wlan_device = interface.get_interface()
+    int_choices = ["1","2","3","4","5","6","0"]
+    str_choices = [ "WiFi Scan & Capture", "WiFi Cracking",
+                    "Full Suite (Scan&Capture + Crack)","WAP Admin Attack", 
+                    "WiFi DOS", "Select WLAN Device","Exit"]
     while invalid:
-        int_choices = ["1","2","3","4","5","6","0"]
-        str_choices = [ "WiFi Scan & Capture", "WiFi Cracking",
-                        "Full Suite (Scan&Capture + Crack)","WAP Admin Attack", 
-                        "WiFi DOS", "Select WLAN Device","Exit"]
-        descs = [
-                    "WLAN Device Selected: " + str(interface.get_logicalname(wlan_device)),
-                    "Previous Captured File: " + str(capture_filename),
-                ]
-        utils.header("Tools Menu", descs)
+        desc = "WLAN Device Selected: " + str(interface.get_logicalname(wlan_device))
+        utils.header("Tools Menu", desc)    
         choice = utils.menu(int_choices, str_choices)
         if utils.valid_choice(choice, int_choices):
             if choice == "0": #EXIT
@@ -95,19 +92,18 @@ def run():
                 utils.yesNo("WiFi Cracking", "This function expects that you have a captured file already.", "Do you have a captured file?", False)
             elif choice == "4": #WAP ADMIN ATTACK
                 print("Test: " + str_choices[int(choice)-1])
-            
             elif choice == "6": #SELECT WLAN DEVICE
                 wlan_device = interface.get_interface()
-            utils.getch("Checkpoint: Main Menu\nPress Enter to continue...")
+            interface.disable_monitor(wlan_device)
     exit(0)
 
 def wpa_scan_capture(wlan_device):
     if check_wlan(wlan_device):
-        target = wpascan.get_target(wlan_device) #Find target WiFi network
+        target = wpascan.get_target(wlan_device) #Find target WiFi network (via Scanning and Targetting)
         if target != None:
             bssid = target["bssid"] #mac-address
             essid = target["essid"] #ssid
-            return wpacapture.capture_handshake(wlan_device, target)
+            return wpacapture.capture_handshake(wlan_device, target) #Capture Handhake (includes Deauth if set)
         else:   
             print("No target WiFi selected!")
             utils.getch()

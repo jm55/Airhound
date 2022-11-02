@@ -234,8 +234,8 @@ def disable_monitor(device):
 
     steps = [
                 "ifconfig " + logicalname + " down",
-                "iwconfig " + logicalname + " mode managed "
-                "ifconfig " + logicalname
+                "iwconfig " + logicalname + " mode managed"
+                "ifconfig " + logicalname + " up"
             ]
     for s in steps:
         process = subprocess.Popen(s, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)

@@ -179,10 +179,13 @@ def root_check():
 #Show 'Press Enter to continue"
 #Add msg to specify message
 def getch(msg=""):
-    if msg == "":
-        input("Press Enter to continue...")
-    else:
-        input(msg)
+    try:
+        if msg == "":
+            input("Press Enter to continue...")
+        else:
+            input(msg)
+    except EOFError as e:
+        print(e)
 
 #Check menu selection alignement
 def check_menu(int_choices:str, str_choices:list):
@@ -199,7 +202,12 @@ def menu(int_choices:str, str_choices:list):
     for ctr in range(len(int_choices)):
         print(str(int_choices[ctr]) + " - " + str_choices[ctr])
     print("")
-    return input("Enter choice: ")
+    choice = ""
+    try:
+        choice = input("Enter choice: ")
+    except EOFError as e:
+        print(e)
+    return choice
 
 #Checks if choice is valid from choices
 def valid_choice(choice:str, choices:list):
