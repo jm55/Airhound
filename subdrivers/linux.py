@@ -29,7 +29,6 @@ import wifi.capture.wpscapture as wpscapture
 import cracking.wpa as wpacracking
 import cracking.wps as wpscracking
 import deauth.deauth as deauth
-import admin.admin as admin
 import time
 import json
 
@@ -43,9 +42,9 @@ def run():
     utils.confirm(utils.running_OS())
     invalid = True
     wlan_device = interface.get_interface()
-    int_choices = ["1","2","3","4","5","6","7","0"]
+    int_choices = ["1","2","3","4","5","6","0"]
     str_choices = [ "WiFi Scan & Capture", "WiFi Cracking",
-                    "Full Suite (Scan&Capture + Crack)","WAP Admin Attack", 
+                    "Full Suite (Scan&Capture + Crack)", 
                     "WiFi DOS", "Select WLAN Device","Utilities","Exit"]
     while invalid:
         desc = "WLAN Device Selected: " + str(interface.get_logicalname(wlan_device))
@@ -86,7 +85,7 @@ def run():
                                 utils.getch()
                     elif choice == "3": #FULL SUITE (WIFI SCAN+CAPTURE & WIFI CRACKING)
                         print("Test: " + str_choices[int(choice)-1])
-                    elif choice == "5": #WIFI DOS
+                    elif choice == "4": #WIFI DOS
                         print("Test: " + str_choices[int(choice)-1])
                         wifi_dos(wlan_device)
                     else:
@@ -112,24 +111,12 @@ def run():
                 else:
                     utils.header("WiFi Cracking", "Cracked Password: " + password)
                 utils.getch()
-            elif choice == "4": #WAP ADMIN ATTACK
-                credentials = admin_access()
-                if credentials != None:
-                    utils.header("WAP Admin Attack", ["Username: " + credentials[0], "Password: " + credentials[1]])
-            elif choice == "6": #SELECT WLAN DEVICE
+            elif choice == "5": #SELECT WLAN DEVICE
                 wlan_device = interface.get_interface()
-            elif choice == "7": #UTILITIES
+            elif choice == "6": #UTILITIES
                 utilities()
             interface.disable_monitor(wlan_device)
     exit(0)
-
-def admin_access():
-    utils.header("WAP Admin Attack")
-    credentials = admin.scrape_credentials()
-    if credentials == None:
-        utils.header("WAP Admin Attack", "No credentials attained")
-        utils.getch()
-    return credentials #Return a tuple/dictionary containing the username and password of the network device, none if exit or nothing is really attained.
 
 def utilities():
     utils.header("Utilities")
@@ -139,7 +126,7 @@ def utilities():
     mode = ""
     while True:
         utils.header("Utilities")
-        mode = menu(int_mode, str_mode)
+        mode = utils.menu(int_mode, str_mode)
         if utils.valid_choice(mode, int_mode):
             break
     
