@@ -26,6 +26,7 @@ import wifi.capture.wpacapture as wpacapture
 import wifi.scanning.wpsscan as wpsscan
 import wifi.capture.wpscapture as wpscapture
 import deauth.deauth as deauth
+import admin.admin as admin
 import time
 import json
 
@@ -91,25 +92,31 @@ def run():
                 print("Test: " + str_choices[int(choice)-1])
                 utils.yesNo("WiFi Cracking", "This function expects that you have a captured file already.", "Do you have a captured file?", False)
             elif choice == "4": #WAP ADMIN ATTACK
-                print("Test: " + str_choices[int(choice)-1])
+                credentials = admin_access()
+                if credentials != None:
+                    utils.header("WAP Admin Attack", ["Username: " + credentials[0], "Password: " + credentials[1]])
             elif choice == "6": #SELECT WLAN DEVICE
                 wlan_device = interface.get_interface()
             interface.disable_monitor(wlan_device)
     exit(0)
 
+def admin_access():
+    utils.header("WAP Admin Attack")
+    credentials = admin.scrape_credentials()
+
+    if credentials == None:
+        utils.header("WAP Admin Attack", "No credentials attained")
+        utils.getch()
+    return credentials #Return a tuple/dictionary containing the username and password of the network device, none if exit or nothing is really attained.
+
 def wpa_scan_capture(wlan_device):
-    if check_wlan(wlan_device):
-        target = wpascan.get_target(wlan_device) #Find target WiFi network (via Scanning and Targetting)
-        if target != None:
-            bssid = target["bssid"] #mac-address
-            essid = target["essid"] #ssid
-            return wpacapture.capture_handshake(wlan_device, target) #Capture Handhake (includes Deauth if set)
-        else:   
-            print("No target WiFi selected!")
-            utils.getch()
-    else:
-        print("Function not allowed.\nYou haven't selected a WLAN device.")
-    return None #Return captured filename
+    target = wpascan.get_target(wlan_device) #Find target WiFi network (via Scanning and Targetting)
+    if target != None:
+        return wpacapture.capture_handshake(wlan_device, target) #Capture Handhake (includes Deauth if set)
+    else:   
+        print("No target WiFi selected!")
+        utils.getch()
+        return None #Return captured filename
 
 def wps_scan_capture(wlan_device):
     if check_wlan(wlan_device):
@@ -118,14 +125,5 @@ def wps_scan_capture(wlan_device):
         print("Function not allowed.\nYou haven't selected a WLAN device.")
 
 def wifi_dos(wlan_device):
-    if check_wlan(wlan_device):
-        deauth.wifi_dos(wlan_device)
-        utils.display_countdown("WiFi DOS (Deauth) Attack", "Stopping deauth attack...", 5)
-    else:
-        print("Function not allowed.\nYou haven't selected a WLAN device.")
-
-def check_wlan(wlan_device):
-    if wlan_device != None:
-        return True
-    else:
-        return False
+    deauth.wifi_dos(wlan_device)
+    utils.display_countdown("WiFi DOS (Deauth) Attack", "Stopping deauth attack...", 5)

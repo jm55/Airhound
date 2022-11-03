@@ -28,6 +28,7 @@ import json
 import csv
 import re
 import time
+import ipaddress
 
 title = "NSSECU2 Hacking Tool"
 test = ["1","2","3"]
@@ -342,6 +343,13 @@ def simplify_wifi_list(wifi_list: list, wps:False):
 
 def valid_mac(mac_address:str): #https://stackoverflow.com/a/7629690
     return re.match("[0-9a-f]{2}([-:]?)[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$", mac_address.lower())
+
+def valid_ip(ip_str):
+    try:
+        ipaddress.ip(ip_str)
+        return True
+    except ValueError:
+        return False
 
 def set_countdown(str_header, min, max):
     valid = False
