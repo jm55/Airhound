@@ -20,11 +20,14 @@ LINUX SUBDRIVER MODULE
 '''
 
 import utils.utils as utils
+import utils.converters as converters
 import interfaces.interfaces as interface
 import wifi.scanning.wpascan as wpascan
 import wifi.capture.wpacapture as wpacapture
 import wifi.scanning.wpsscan as wpsscan
 import wifi.capture.wpscapture as wpscapture
+import cracking.wpa as wpacracking
+import cracking.wps as wpscracking
 import deauth.deauth as deauth
 import admin.admin as admin
 import time
@@ -40,10 +43,10 @@ def run():
     utils.confirm(utils.running_OS())
     invalid = True
     wlan_device = interface.get_interface()
-    int_choices = ["1","2","3","4","5","6","0"]
+    int_choices = ["1","2","3","4","5","6","7","0"]
     str_choices = [ "WiFi Scan & Capture", "WiFi Cracking",
                     "Full Suite (Scan&Capture + Crack)","WAP Admin Attack", 
-                    "WiFi DOS", "Select WLAN Device","Exit"]
+                    "WiFi DOS", "Select WLAN Device","Utilities","Exit"]
     while invalid:
         desc = "WLAN Device Selected: " + str(interface.get_logicalname(wlan_device))
         utils.header("Tools Menu", desc)    
@@ -90,24 +93,74 @@ def run():
                         exit(1)
             elif choice == "2": #WIFI CRACKING
                 print("Test: " + str_choices[int(choice)-1])
-                utils.yesNo("WiFi Cracking", "This function expects that you have a captured file already.", "Do you have a captured file?", False)
+                int_mode = ["1","2","0"]
+                str_mode = ["WPA Crack", "WPS Crack", "Exit"]
+                password = ""
+                while True:
+                    utils.header("WiFi Cracking")
+                    mode = utils.menu(int_mode, str_mode)
+                    if mode == "1":
+                        password = wpa_cracking()
+                        break
+                    elif mode == "2":
+                        password = wps_cracking()
+                        break
+                    elif mode == "0":
+                        break
+                if password == None:
+                    utils.header("WiFi Cracking", "No Password Cracked!")
+                else:
+                    utils.header("WiFi Cracking", "Cracked Password: " + password)
+                utils.getch()
             elif choice == "4": #WAP ADMIN ATTACK
                 credentials = admin_access()
                 if credentials != None:
                     utils.header("WAP Admin Attack", ["Username: " + credentials[0], "Password: " + credentials[1]])
             elif choice == "6": #SELECT WLAN DEVICE
                 wlan_device = interface.get_interface()
+            elif choice == "7": #UTILITIES
+                utilities()
             interface.disable_monitor(wlan_device)
     exit(0)
 
 def admin_access():
     utils.header("WAP Admin Attack")
     credentials = admin.scrape_credentials()
-
     if credentials == None:
         utils.header("WAP Admin Attack", "No credentials attained")
         utils.getch()
     return credentials #Return a tuple/dictionary containing the username and password of the network device, none if exit or nothing is really attained.
+
+def utilities():
+    utils.header("Utilities")
+    int_mode = ["1","2","0"]
+    str_mode = ["HashCat Capture File Conversion", "HashCat 3.6 Capture File Conversion", "Exit"]
+
+    mode = ""
+    while True:
+        utils.header("Utilities")
+        mode = menu(int_mode, str_mode)
+        if utils.valid_choice(mode, int_mode):
+            break
+    
+    if mode == "1":
+        converters.cap_to_HS()
+    elif mode == "2":
+        converters.cap_to_HS3()
+    elif mode == "0":
+        return
+
+def wpa_cracking():
+    utils.header("WiFi Cracking (WPA)")
+    filename = input("Enter filename: ")
+    if filename.strip() == "":
+        return None
+    return wpacracking.crack(filename)
+
+def wps_cracking():
+    password = ""
+    utils.header("WiFi Cracking (WPS)")
+    return password
 
 def wpa_scan_capture(wlan_device):
     target = wpascan.get_target(wlan_device) #Find target WiFi network (via Scanning and Targetting)
