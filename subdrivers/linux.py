@@ -44,7 +44,7 @@ def run():
     wlan_device = interface.get_interface()
     int_choices = ["1","2","3","4","5","6","7","0"]
     str_choices = [ "WPA Scan & Capture", "WPA Cracking",
-                    "WPA Full Suite (Scan & Capture + Crack)","WPS Scan and Crack", 
+                    "WPA Full Suite (Scan & Capture + Crack)","WPS Scan and Crack - DEPRECATED", 
                     "WiFi DOS", "Select WLAN Device","Utilities","Exit"]
     while invalid:
         desc = "WLAN Device Selected: " + str(interface.get_logicalname(wlan_device))
@@ -70,19 +70,24 @@ def run():
                     elif choice == "3": #FULL SUITE (WIFI SCAN+CAPTURE & WIFI CRACKING)
                         print("Test: " + str_choices[int(choice)-1])
                     elif choice == "4": #WPS SCAN+CRACK
-                        utils.header("WPS Scan + Cracking", ["Note","This feature of the program is not guaranteed to work all", " the time due to WAPs having protection against Reaver attacks."])
-                        utils.getch()
-                        wps_wifi = wps_scan(wlan_device)
-                        if wps_wifi == None:
-                            utils.header("WPS Scan + Cracking", "No WPS WiFi network selected")
-                        else:
-                            pin = wps_cracking(wps_wifi, wlan_device)
-                            if pin != "":
-                                result = ["Target: " + wps_wifi["ssid"],"PIN: " + pin]
-                                utils.header("WPS Scan + Cracking", result)
+                        wps_halted = True
+                        if not wps_halted:
+                            utils.header("WPS Scan + Cracking", ["Note","This feature of the program is not guaranteed to work all", " the time due to WAPs having protection against Reaver attacks."])
+                            utils.getch()
+                            wps_wifi = wps_scan(wlan_device)
+                            if wps_wifi == None:
+                                utils.header("WPS Scan + Cracking", "No WPS WiFi network selected")
                             else:
-                                utils.header("WPS Scan + Cracking", "No PIN attained")
-                        utils.getch()
+                                pin = wps_cracking(wps_wifi, wlan_device)
+                                if pin != "":
+                                    result = ["Target: " + wps_wifi["ssid"],"PIN: " + pin]
+                                    utils.header("WPS Scan + Cracking", result)
+                                else:
+                                    utils.header("WPS Scan + Cracking", "No PIN attained")
+                            utils.getch()
+                        else:
+                            utils.header("WPS Scan + Cracking", "This feature is indefinitely deprecated!")
+                            utils.getch()
                     elif choice == "5": #WIFI DOS
                         print("Test: " + str_choices[int(choice)-1])
                         wifi_dos(wlan_device)
@@ -110,17 +115,17 @@ def utilities():
     mode = ""
     while True:
         utils.header("Utilities")
-        mode = menu(int_mode, str_mode)
+        mode = utils.menu(int_mode, str_mode)
         if utils.valid_choice(mode, int_mode):
             break
-    
+    output = ""
     if mode == "1":
-        converters.cap_to_HS()
+        utils.header("HashCat Capture File Conversion Result", "Output file: " + converters.cap_to_HS())
     elif mode == "2":
-        converters.cap_to_HS3()
-    elif mode == "0":
-        return
+        utils.header("HashCat 3.6 Capture File Conversion Result", "Output file: " + converters.cap_to_HS3())
+    utils.getch(
 
+    )
 def wpa_cracking():
     utils.header("WiFi Cracking (WPA)")
     filename = input("Enter filename: ")
