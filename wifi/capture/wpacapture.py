@@ -65,15 +65,13 @@ def capture_handshake(device, wifi):
             ]
 
     #Capture proper
-    if utils.yesNo("WPA Capture", descs, "Begin Capture?", True):    
+    if utils.yesNo("WPA Capture", descs, "Begin Capture?", True):
+        #Load processes and begin capture
         utils.header("WPA Capture", "Loading processes...")
         deauth_process = subprocess.Popen(deauth_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         time.sleep(3)
         capture_process = subprocess.Popen(capture_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         time.sleep(3)
-
-        #deauth_res, deauth_err = deauth_process.communicate()        
-        #capture_res, capture_err = capture_process.communicate()
 
         utils.header("WPA Capture", [
                 "Capturing handshake...",
@@ -81,20 +79,24 @@ def capture_handshake(device, wifi):
                 "Deauth Command: " + deauth_command
             ])
 
+        #Await for end of capture
         for line in capture_process.stdout:
             decoded = line.decode("utf-8")
             if "handshake" in decoded:
                 break
-            
+
+        #End capture
         print("Handshake Captured, Ending Capture...")
         capture_process.kill()
         deauth_process.kill()
         time.sleep(6)
         interface.disable_monitor(device)
 
+        #Rename file to remove the '-01' suffix that airodump-ng attaches
         rename = subprocess.Popen("mv " + filename + "-01.cap " + filename + ".cap", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-
-        utils.display_countdown("WPA Capture", ["Handshake Captured!"], 3) #Best function to use w/o causing input() aftetr the function call capture_handshake 
+        
+        #To prevent input() issues after the stdouts of capture_process #DONT CHANGE
+        utils.display_countdown("WPA Capture", ["Handshake Captured!"], 3) 
 
         return filename + ".cap"
     else:

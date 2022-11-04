@@ -30,38 +30,20 @@ lshw subprocess formatted as JSON, example are as follows:
     {
         "id": "network",
         "class": "network",
-        "claimed": true,
-        "handle": "PCI:0000:02:00.0",
+        ...
         "description": "Wireless interface",
         "product": "QCA9377 802.11ac Wireless Network Adapter",
         "vendor": "Qualcomm Atheros",
-        "physid": "0",
-        "businfo": "pci@0000:02:00.0",
+        ...
         "logicalname": "wlan0",
-        "version": "31",
-        "serial": "10:63:c8:5f:57:11",
-        "width": 64,
-        "clock": 33000000,
+        ...
         "configuration": {
             "broadcast": "yes",
             "driver": "ath10k_pci",
-            "driverversion": "5.19.0-kali2-amd64",
-            "firmware": "WLAN.TF.2.1-00021-QCARMSWP-1",
-            "ip": "192.168.2.252",
-            "latency": "0",
-            "link": "yes",
-            "multicast": "yes",
-            "wireless": "IEEE 802.11"
+            ...
         },
         "capabilities": {
-            "pm": "Power Management",
-            "msi": "Message Signalled Interrupts",
-            "pciexpress": "PCI Express",
-            "bus_master": "bus mastering",
-            "cap_list": "PCI capabilities listing",
-            "ethernet": true,
-            "physical": "Physical interface",
-            "wireless": "Wireless-LAN"
+            ...
         }
     }
 ]
@@ -144,10 +126,6 @@ def get_key(device, key):
 
 #Returns logical name of the device. Example: wlan0, wlan1, etc.
 def get_logicalname(device):
-    #MAY INCLUDE CODE THAT WOULD CHECK IF DEVICE LOGICALNAME HAS *mon SUFFIX
-    #MAYBE DO COMMAND: sudo airmon-ng | grep $device["logicalname"] ?
-    #IF IT IS NOT "" THEN THERE IS A DEVICE WITH *mon SUFFIX, THUS RETURN device["logicalname"] + "mon"
-    #ELSE, RETURN AS IS
     return str(get_key(device, "logicalname"))
 
 #Returns MAC Address of the device.
@@ -224,8 +202,8 @@ def enable_monitor(device, channel=""):
         res, err = process.communicate()
         if process.returncode != 0:
             return False
-    
-    return True, device
+     
+    return True, device #Return updated device
 
 #Disable monitor for specified device
 def disable_monitor(device):
@@ -253,7 +231,7 @@ def disable_monitor(device):
         if process.returncode != 0:
             return False
 
-    return True, device
+    return True, device #Return updated device
 
 #Check if previous connections are restored
 def check_connection():

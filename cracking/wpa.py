@@ -140,7 +140,6 @@ def brute_attack(filename: str, wifi:dict):
     #Bruteforce command/process
     brute_command = "crunch " + str(start) + " " + str(end) + " " + charset + " | aircrack-ng -e " + ssid + " -w - " + filename + " | grep FOUND"
     brute_process = subprocess.Popen(brute_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-
     utils.header("WPA Cracking",["Configuration:","Size: " +    str(start) + "-" + str(end),"Charset: " + charset, "Iterations: " + iterations])
     print("Bruteforce cracking in progress...")
 

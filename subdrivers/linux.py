@@ -25,7 +25,6 @@ import interfaces.interfaces as interface
 import wifi.scanning.wpascan as wpascan
 import wifi.capture.wpacapture as wpacapture
 import wifi.scanning.wpsscan as wpsscan
-import wifi.capture.wpscapture as wpscapture
 import cracking.wpa as wpacracking
 import cracking.wps as wpscracking
 import deauth.deauth as deauth
@@ -51,12 +50,17 @@ def run():
         utils.header("Tools Menu", desc)   
         choice = utils.menu(int_choices, str_choices)
         if utils.valid_choice(choice, int_choices):
-            if choice == "0": #EXIT
+            
+            #Exit
+            if choice == "0":
                 if wlan_device != None:
                     interface.disable_monitor(wlan_device)
                 utils.cls()
                 exit(0)
+            
+            #Commands that need WLAN device in monitoring mode
             elif choice == "1" or choice == "3" or choice == "4" or choice == "5":
+                #No WLAN device specified
                 if wlan_device == None:
                     utils.header("No WLAN device selected", 
                                     [
@@ -65,6 +69,7 @@ def run():
                                     ]
                                 )
                     utils.getch()
+                #w/ WLAN device specified
                 else:
                     if choice == "1": #WIFI SCAN+CAPTURE
                         capture_filename = wpa_scan_capture(wlan_device)[0]
@@ -72,6 +77,7 @@ def run():
                         fullsuite(wlan_device)
                     elif choice == "4": #WPS SCAN+CRACK
                         wps_halted = False
+                        
                         if not wps_halted:
                             utils.header("WPS Scan + Cracking", ["Note","This feature of the program is not guaranteed to work all", " the time due to WAPs having protection against Reaver attacks."])
                             utils.getch()
@@ -89,6 +95,7 @@ def run():
                         else:
                             utils.header("WPS Scan + Cracking", "This feature is indefinitely deprecated!")
                             utils.getch()
+                    
                     elif choice == "5": #WIFI DOS
                         print("Test: " + str_choices[int(choice)-1])
                         wifi_dos(wlan_device)
@@ -108,6 +115,7 @@ def run():
             interface.disable_monitor(wlan_device)
     exit(0)
 
+#File Converters
 def utilities():
     utils.header("Utilities")
     int_mode = ["1","2","0"]
@@ -126,6 +134,7 @@ def utilities():
         utils.header("HashCat 3.6 Capture File Conversion Result", "Output file: " + converters.cap_to_HS3())
     utils.getch()
 
+#Full Suite WPA
 def fullsuite(wlan_device):
     capture = wpa_scan_capture(wlan_device)
     filename = capture[1]
@@ -137,6 +146,7 @@ def fullsuite(wlan_device):
         utils.header("WiFi WPA Full Suite", "Cracked Password: " + password)
     utils.getch()
 
+#WPA Cracking
 def wpa_cracking(wifi:dict, filename=""):
     utils.header("WiFi Cracking (WPA)")
     if filename != "":
@@ -146,10 +156,12 @@ def wpa_cracking(wifi:dict, filename=""):
         return None
     return wpacracking.crack(filename, wifi)
 
+#WPS Cracking
 def wps_cracking(wifi:dict, wlan_device):
     password = wpscracking.crack(wifi, wlan_device)
     return password
 
+#WPA Scan & Capture
 def wpa_scan_capture(wlan_device):
     target = wpascan.get_target(wlan_device) #Find target WiFi network (via Scanning and Targetting)
     if target != None:
@@ -159,9 +171,11 @@ def wpa_scan_capture(wlan_device):
         utils.getch()
         return None #Return captured filename
 
+#WPS Scan
 def wps_scan(wlan_device):
     return wpsscan.get_target(wlan_device)
     
+#WiFi DOS
 def wifi_dos(wlan_device):
     deauth.wifi_dos(wlan_device)
     utils.display_countdown("WiFi DOS (Deauth) Attack", "Stopping deauth attack...", 5)

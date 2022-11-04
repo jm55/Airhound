@@ -72,10 +72,9 @@ def wifi_dos(device):
         #Commence process
         process = subprocess.Popen(process_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
-        #
+        #Wait for process to finish until user presses Enter
         utils.header("WiFi DOS (Deauth) Attack", ["WiFi DOS Attack Ongoing...","WiFi DOS PID: " + str(process.pid)])
-        utils.getch("Press enter to stop WiFi DOS Attack...")
-        
+        utils.getch("Press Enter to stop WiFi DOS Attack...")
         process.kill()
 
         interface.disable_monitor(device)

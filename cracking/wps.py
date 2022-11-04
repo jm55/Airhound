@@ -26,7 +26,8 @@ def crack(wifi:dict, device):
     if not utils.yesNo("WPS Scan + Cracking", desc, "Begin WPS Cracking?", False):
         return ""
     
-    interface.enable_monitor(device, channel=wifi["channel"])
+    enable = interface.enable_monitor(device, channel=wifi["channel"])
+    device = enable[1]
     
     reaver_command = "reaver -i " + interface.get_logicalname(device) + " -c " + wifi["channel"] + " -b " + wifi["bssid"] + " -K -vv"
     reaver_process = subprocess.Popen(reaver_command, shell=True)

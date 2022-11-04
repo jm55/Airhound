@@ -28,14 +28,15 @@ import json
 
 ##Scan for WiFi (WPS) using WLAN device (device) and return target WiFi based on user selection
 def get_target(device):
+    #Notify about unguaranteed scanning
     utils.header("WiFi Scan + Capture", "Do note that this tool may not work depending conditions not suitable for \'wash\' to run.")
     utils.getch()
 
+    #Scan & Select WiFi Network
     utils.header("WiFi Scan + Capture", "Scan and Select target WiFi network.")
     interface.print_device_summary(device)
     print("")
     utils.print_bar(len("WPS Scan and Select target WiFi network."))
-
     rescan = True
     while rescan:
         wps_list = scan_wifi(device)
@@ -77,8 +78,6 @@ def get_target(device):
 def scan_wifi(device):
     service_status = False
     device_logicalname = interface.get_logicalname(device)
-    device_macaddress = interface.get_macaddress(device)
-    device_driver = interface.get_driver(device)
     wps_list= []
 
     #Disable WLAN/Network Services

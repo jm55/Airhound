@@ -33,12 +33,12 @@ def get_target(device):
     print("")
     utils.print_bar(len("Scan and Select target WiFi network."))
 
+    #Scan and filter wpa_list
     wpa_list = scan_wifi(device)
-
     filtered_list = utils.simplify_wifi_list(wpa_list, False) #Print and return filtered selection
-
+    
+    #Ask to select WiFi
     target_id = -1 #WiFi selector
-
     if len(wpa_list) == 0:
         utils.header("WiFi Results",["No WiFi Networks Found!","Can be attributed to ", 
                                     "Lack of WiFi networks available","or",

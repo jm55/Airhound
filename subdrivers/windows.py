@@ -54,8 +54,7 @@ def saveAsTXT(filename, wifi_list):
     except:
         return None
 
-#Driver for Windows-based function
-#Serves as home menu
+#Driver for Windows-based function; Serves as home menu
 def run():
     utils.confirm(utils.running_OS())
     invalid = True
