@@ -383,3 +383,11 @@ def display_countdown(str_header, desc, countdown):
         header(str_header, desc_list)
         time.sleep(1)
         countdown -= 1
+
+def find_iterations(charset, min, max):
+    iterations = 0
+    if min == max:
+        return pow(len(charset),min)
+    while min <= max:
+        iterations += pow(len(charset),min)
+    return iterations

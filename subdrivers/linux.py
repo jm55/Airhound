@@ -94,8 +94,8 @@ def run():
                     else:
                         exit(1)
             elif choice == "2": #WPA CRACKING
-                password = wpa_cracking()
-                if password == None:
+                password = wpa_cracking(None)
+                if password == None or password == "":
                     utils.header("WiFi Cracking", "No Password Cracked!")
                 else:
                     utils.header("WiFi Cracking", "Cracked Password: " + password)
@@ -126,12 +126,12 @@ def utilities():
     utils.getch(
 
     )
-def wpa_cracking():
+def wpa_cracking(wifi:dict):
     utils.header("WiFi Cracking (WPA)")
     filename = input("Enter filename: ")
     if filename.strip() == "":
         return None
-    return wpacracking.crack(filename)
+    return wpacracking.crack(filename, wifi)
 
 def wps_cracking(wifi:dict, wlan_device):
     password = wpscracking.crack(wifi, wlan_device)
