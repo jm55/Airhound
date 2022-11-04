@@ -31,8 +31,6 @@ from threading import Thread
 def capture_handshake(device, wifi):
     #Use these device details however needed
     device_logicalname = interface.get_logicalname(device)
-    device_macaddress = interface.get_macaddress(device)
-    device_driver = interface.get_driver(device)
 
     #Preparatory
     filename = ""
@@ -55,6 +53,7 @@ def capture_handshake(device, wifi):
     capture_command = "airodump-ng -c " + wifi["channel"] + " --bssid " + wifi["bssid"] + " --output-format pcap -w " + filename + " " + device_logicalname
     deauth_command = deauth.deauth_wifi_command(wifi, device, host_target)        
 
+    #Descriptions
     descs = [   
                 "Capture Handshake", "\n", 
                 "====CONFIGURATION DETAILS====",

