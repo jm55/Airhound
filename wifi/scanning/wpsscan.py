@@ -38,8 +38,7 @@ def get_target(device):
 
     rescan = True
     while rescan:
-        #wps_list = scan_wifi(device)
-        wps_list = utils.parseWashOutput("others/test/wash.txt")
+        wps_list = scan_wifi(device)
         utils.header("WiFi Scan + Capture","WiFi Scan Finished")
         if len(wps_list) == 1:
             utils.header("WiFi Scan + Capture", 
@@ -92,18 +91,18 @@ def scan_wifi(device):
     utils.getch()
 
     #Ask for min time for scanning
-    countdown = utils.set_countdown("WiFi (WPA) Scan Time", 30, 240)
+    countdown = utils.set_countdown("WiFi (WPS) Scan Time", 20, 240)
 
     #Prepare command
     filename = utils.getFormattedDT()
-    command = "sudo wash -i " + device_logicalname + " > " + filename + ".txt"
+    wash_command = "wash -i " + device_logicalname + " > " + filename + ".txt"
 
     #Execute command
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, bufsize=1)
+    wash = subprocess.Popen(wash_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
     #Terminate at specified time; Does not indicate networks scanned.
     utils.display_countdown("Scanning Network...","Mode: WPS", countdown)
-    process.kill()
+    wash.kill()
 
     #Rename file to remove <filename>-xx.csv suffix
     #Show as "Loading..."
@@ -123,7 +122,7 @@ def scan_wifi(device):
 
 #Prints the filtered list accordingly
 def pretty_print(filtered_list:str):
-    print("ID".ljust(4)+"MAC Address".ljust(21)+"SSID".ljust(36)+"Power (dBm)".ljust(13))
+    print("ID".ljust(4)+"MAC Address".ljust(21)+"SSID".ljust(36)+"Power (dBm)".ljust(13)+"Channel".ljust(7))
     for wifi in filtered_list:
         print(wifi["id"].ljust(4)+ wifi["bssid"].ljust(21)+
-            wifi["essid"].ljust(36)+wifi["power"].ljust(13)) 
+            wifi["essid"].ljust(36)+wifi["power"].ljust(13)+wifi["channel"].ljust(7)) 

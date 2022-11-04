@@ -210,19 +210,20 @@ def enable_monitor(device, channel=""):
     else:
         steps.append("iwconfig " + logicalname + " mode monitor")
 
-    for s in steps:
-        process = subprocess.Popen(s, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        process.wait()
-        res, err = process.communicate()
-        if process.returncode != 0:
-            return False
-    
     '''
         UPDATE device["logicalname"] HERE IF THE 'mon' SUFFIX IS DETECTED AFTER AIRMON-NG STARTS
         
         CHECK IF device LOGICALNAME CHANGED AFTER airmon_ng SUBPROCESS TO ONE WITH 'mon' SUFFIX
         AND UPDATE ACCORDINGLY
     '''
+
+    steps.append("ifconfig " + logicalname + " up")
+    for s in steps:
+        process = subprocess.Popen(s, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        process.wait()
+        res, err = process.communicate()
+        if process.returncode != 0:
+            return False
     
     return True, device
 
@@ -235,8 +236,16 @@ def disable_monitor(device):
     steps = [
                 "ifconfig " + logicalname + " down",
                 "iwconfig " + logicalname + " mode managed"
-                "ifconfig " + logicalname + " up"
+                
             ]
+
+    '''
+        CHECK device["logicalname"] 
+        IF IT CONTAINS 'mon' SUFFIX, REMOVE IF SO
+    '''
+
+    steps.append("ifconfig " + logicalname + " up")
+    
     for s in steps:
         process = subprocess.Popen(s, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         process.wait()
@@ -244,11 +253,6 @@ def disable_monitor(device):
         if process.returncode != 0:
             return False
 
-    '''
-        CHECK device["logicalname"] 
-        IF IT CONTAINS 'mon' SUFFIX, REMOVE IF SO
-    '''
-    
     return True, device
 
 #Check if previous connections are restored

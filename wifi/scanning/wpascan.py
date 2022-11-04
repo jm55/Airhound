@@ -119,8 +119,8 @@ def scan_wifi(device):
 
 #Prints the filtered list accordingly
 def pretty_print(filtered_list:list):
-    print("ID".ljust(4)+"MAC Address".ljust(21)+"SSID".ljust(36)+"Security".ljust(18)+"Cipher".ljust(21)+"Power (dBm)".ljust(13))
+    print("ID".ljust(4)+"MAC Address".ljust(21)+"SSID".ljust(36)+"Security".ljust(18)+"Cipher".ljust(21)+"Power (dBm)".ljust(13)+"Channel".ljust(7))
     for wifi in filtered_list:
         print(wifi["id"].ljust(4)+ wifi["bssid"].ljust(21)+
             wifi["essid"].ljust(36)+ wifi["privacy"].ljust(18)+ 
-            wifi["cipher"].ljust(21)+ wifi["power"].ljust(13)) 
+            wifi["cipher"].ljust(21)+ wifi["power"].ljust(13)+wifi["channel"].ljust(7)) 

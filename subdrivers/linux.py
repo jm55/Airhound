@@ -42,9 +42,9 @@ def run():
     utils.confirm(utils.running_OS())
     invalid = True
     wlan_device = interface.get_interface()
-    int_choices = ["1","2","3","4","5","6","0"]
-    str_choices = [ "WiFi Scan & Capture", "WiFi Cracking",
-                    "Full Suite (Scan&Capture + Crack)", 
+    int_choices = ["1","2","3","4","5","6","7","0"]
+    str_choices = [ "WPA Scan & Capture", "WPA Cracking",
+                    "WPA Full Suite (Scan & Capture + Crack)","WPS Scan and Crack", 
                     "WiFi DOS", "Select WLAN Device","Utilities","Exit"]
     while invalid:
         desc = "WLAN Device Selected: " + str(interface.get_logicalname(wlan_device))
@@ -56,7 +56,7 @@ def run():
                     interface.disable_monitor(wlan_device)
                 utils.cls()
                 exit(0)
-            elif choice == "1" or choice == "3" or choice == "5":
+            elif choice == "1" or choice == "3" or choice == "4" or choice == "5":
                 if wlan_device == None:
                     utils.header("No WLAN device selected", 
                                     [
@@ -66,54 +66,38 @@ def run():
                                 )
                 else:
                     if choice == "1": #WIFI SCAN+CAPTURE
-                        mode_invalid = True
-                        while mode_invalid:
-                            utils.header("WiFi Scan + Capture","Select Mode")
-                            int_mode = ["1","2","0"]
-                            str_mode = ["WPA Search", "WPS Search", "Exit"]
-                            mode = utils.menu(int_mode, str_mode)
-                            if utils.valid_choice(mode, int_mode):
-                                mode_invalid = False
-                                if mode == "1":
-                                    capture_filename = wpa_scan_capture(wlan_device)
-                                elif mode == "2":
-                                    capture_filename = wps_scan_capture(wlan_device)
-                                elif mode == "0":
-                                    mode_invalid = False
-                            else:
-                                print("Invalid choice!")
-                                utils.getch()
+                        capture_filename = wpa_scan_capture(wlan_device)
                     elif choice == "3": #FULL SUITE (WIFI SCAN+CAPTURE & WIFI CRACKING)
                         print("Test: " + str_choices[int(choice)-1])
-                    elif choice == "4": #WIFI DOS
+                    elif choice == "4": #WPS SCAN+CRACK
+                        utils.header("WPS Scan + Cracking", ["Note","This feature of the program is not guaranteed to work all", " the time due to WAPs having protection against Reaver attacks."])
+                        utils.getch()
+                        wps_wifi = wps_scan(wlan_device)
+                        if wps_wifi == None:
+                            utils.header("WPS Scan + Cracking", "No WPS WiFi network selected")
+                        else:
+                            pin = wps_cracking(wps_wifi, wlan_device)
+                            if pin != "":
+                                result = ["Target: " + wps_wifi["ssid"],"PIN: " + pin]
+                                utils.header("WPS Scan + Cracking", result)
+                            else:
+                                utils.header("WPS Scan + Cracking", "No PIN attained")
+                        utils.getch()
+                    elif choice == "5": #WIFI DOS
                         print("Test: " + str_choices[int(choice)-1])
                         wifi_dos(wlan_device)
                     else:
                         exit(1)
-            elif choice == "2": #WIFI CRACKING
-                print("Test: " + str_choices[int(choice)-1])
-                int_mode = ["1","2","0"]
-                str_mode = ["WPA Crack", "WPS Crack", "Exit"]
-                password = ""
-                while True:
-                    utils.header("WiFi Cracking")
-                    mode = utils.menu(int_mode, str_mode)
-                    if mode == "1":
-                        password = wpa_cracking()
-                        break
-                    elif mode == "2":
-                        password = wps_cracking()
-                        break
-                    elif mode == "0":
-                        break
+            elif choice == "2": #WPA CRACKING
+                password = wpa_cracking()
                 if password == None:
                     utils.header("WiFi Cracking", "No Password Cracked!")
                 else:
                     utils.header("WiFi Cracking", "Cracked Password: " + password)
                 utils.getch()
-            elif choice == "5": #SELECT WLAN DEVICE
+            elif choice == "6": #SELECT WLAN DEVICE
                 wlan_device = interface.get_interface()
-            elif choice == "6": #UTILITIES
+            elif choice == "7": #UTILITIES
                 utilities()
             interface.disable_monitor(wlan_device)
     exit(0)
@@ -126,7 +110,7 @@ def utilities():
     mode = ""
     while True:
         utils.header("Utilities")
-        mode = utils.menu(int_mode, str_mode)
+        mode = menu(int_mode, str_mode)
         if utils.valid_choice(mode, int_mode):
             break
     
@@ -144,9 +128,8 @@ def wpa_cracking():
         return None
     return wpacracking.crack(filename)
 
-def wps_cracking():
-    password = ""
-    utils.header("WiFi Cracking (WPS)")
+def wps_cracking(wifi:dict, wlan_device):
+    password = wpscracking.crack(wifi, wlan_device)
     return password
 
 def wpa_scan_capture(wlan_device):
@@ -158,12 +141,9 @@ def wpa_scan_capture(wlan_device):
         utils.getch()
         return None #Return captured filename
 
-def wps_scan_capture(wlan_device):
-    if check_wlan(wlan_device):
-        target = wpsscan.get_target(wlan_device)
-    else:
-        print("Function not allowed.\nYou haven't selected a WLAN device.")
-
+def wps_scan(wlan_device):
+    return wpsscan.get_target(wlan_device)
+    
 def wifi_dos(wlan_device):
     deauth.wifi_dos(wlan_device)
     utils.display_countdown("WiFi DOS (Deauth) Attack", "Stopping deauth attack...", 5)
