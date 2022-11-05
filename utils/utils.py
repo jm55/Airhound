@@ -390,4 +390,5 @@ def find_iterations(charset, min, max):
         return pow(len(charset),min)
     while min <= max:
         iterations += pow(len(charset),min)
+        min += 1
     return iterations
