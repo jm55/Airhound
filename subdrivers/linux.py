@@ -115,7 +115,7 @@ def run():
             interface.disable_monitor(wlan_device)
     exit(0)
 
-#File Converters
+#Utilities
 def utilities():
     utils.header("Utilities")
     int_mode = ["1","2","0"]
