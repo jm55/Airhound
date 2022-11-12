@@ -58,7 +58,7 @@ def scan():
     if lshw.returncode == 0:
         return json.loads(data.decode("utf-8"))
     else:  
-        print("Error: " + err)
+        print("Error: " + str(err))
         return None
 
 #Prints WLAN devices specified in devices parameter
@@ -134,8 +134,10 @@ def get_macaddress(device):
 
 #Returns the driver/chipset of the device.
 def get_driver(device):
-    return get_key(device,"configuration")["driver"]
-
+    if device != None:
+        return get_key(device,"configuration")["driver"]
+    return None
+    
 #Returns summary of the device given in [logicalname, macaddress, driver/chipset] format.
 def get_device_summary(device):
     return [get_logicalname(device), get_macaddress(device), get_driver(device)]
