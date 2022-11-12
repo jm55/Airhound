@@ -122,7 +122,7 @@ def get_interface():
 def get_key(device, key):
     if device != None:
         return device[key]
-    return ""
+    return None
 
 #Returns logical name of the device. Example: wlan0, wlan1, etc.
 def get_logicalname(device):
