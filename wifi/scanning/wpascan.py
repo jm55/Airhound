@@ -28,7 +28,7 @@ import interfaces.interfaces as interface
 
 #Scan for WiFi (WPA) using WLAN device (device) and return target WiFi based on user selection
 def get_target(device):
-    utils.header("WiFi Scan + Capture","Scan and Select target WiFi network.")
+    utils.header("WiFi WPA Scan + Capture","Scan and Select target WiFi network.")
     interface.print_device_summary(device)
     print("")
     utils.print_bar(len("Scan and Select target WiFi network."))
@@ -48,7 +48,7 @@ def get_target(device):
     else:
         invalid = True
         while invalid:
-            utils.header("WiFi Scan + Capture","WiFi Scan Finished!")
+            utils.header("WiFi WPA Scan + Capture","WiFi Scan Finished!")
             pretty_print(filtered_list)
             print("")
             try:

@@ -247,7 +247,8 @@ def check_connection():
 def requirement():
     descs = [   "==== HARDWARE CAPABILITY REQUIREMENT ====",
                 "\n",
-                "The tool requires certain WLAN chipsets in order to work.",
+                "The tool assumes and requires that you have the ",
+                "certain WLAN chipsets in order to work.",
                 "\n",
                 "The WLAN devices you have must support monitoring/injection mode in order to work."
                 "\n",

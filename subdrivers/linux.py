@@ -46,7 +46,7 @@ def run():
                     "WPA Full Suite (Scan & Capture + Crack)","WPS Scan and Crack BETA", 
                     "WiFi DOS", "Select WLAN Device","Utilities","Exit"]
     while invalid:
-        desc = "WLAN Device Selected: " + str(interface.get_logicalname(wlan_device) + " (" + str(interface.get_driver(wlan_device)))
+        desc = "WLAN Device Selected: " + str(interface.get_logicalname(wlan_device) + " (" + str(interface.get_driver(wlan_device)) + ")")
         utils.header("Tools Menu", desc)   
         choice = utils.menu(int_choices, str_choices)
         if utils.valid_choice(choice, int_choices):
@@ -72,7 +72,9 @@ def run():
                 #w/ WLAN device specified
                 else:
                     if choice == "1": #WIFI SCAN+CAPTURE
-                        capture_filename = wpa_scan_capture(wlan_device)[0]
+                        raw_capture = wpa_scan_capture(wlan_device)
+                        if raw_capture != None:
+                            capture_filename = raw_capture[0]
                     elif choice == "3": #FULL SUITE (WIFI SCAN+CAPTURE & WIFI CRACKING)
                         fullsuite(wlan_device)
                     elif choice == "4": #WPS SCAN+CRACK
@@ -136,15 +138,19 @@ def utilities():
 
 #Full Suite WPA
 def fullsuite(wlan_device):
-    capture = wpa_scan_capture(wlan_device)
-    filename = capture[1]
-    wifi = capture[0]
-    password = wpa_cracking(filename, wifi)
-    if password == None or password == "":
-        utils.header("WiFi WPA Full Suite", "No Password Cracked!")
+    if wlan_device == None or wlan_device == "":
+        utils.header("WiFi WPA Full Suite", "No WLAN device found")
+        utils.getch()
     else:
-        utils.header("WiFi WPA Full Suite", "Cracked Password: " + password)
-    utils.getch()
+        capture = wpa_scan_capture(wlan_device)
+        filename = capture[1]
+        wifi = capture[0]
+        password = wpa_cracking(filename, wifi)
+        if password == None or password == "":
+            utils.header("WiFi WPA Full Suite", "No Password Cracked!")
+        else:
+            utils.header("WiFi WPA Full Suite", "Cracked Password: " + password)
+        utils.getch()
 
 #WPA Cracking
 def wpa_cracking(wifi:dict, filename=""):
@@ -166,8 +172,8 @@ def wpa_scan_capture(wlan_device):
     target = wpascan.get_target(wlan_device) #Find target WiFi network (via Scanning and Targetting)
     if target != None:
         return wpacapture.capture_handshake(wlan_device, target), target #Capture Handhake (includes Deauth if set)
-    else:   
-        print("No target WiFi selected!")
+    else:
+        utils.header("WiFi WPA Scan + Capture","No target WiFi selected!")
         utils.getch()
         return None #Return captured filename
 
