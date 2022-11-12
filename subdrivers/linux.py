@@ -143,13 +143,16 @@ def fullsuite(wlan_device):
         utils.getch()
     else:
         capture = wpa_scan_capture(wlan_device)
-        filename = capture[1]
-        wifi = capture[0]
-        password = wpa_cracking(filename, wifi)
-        if password == None or password == "":
-            utils.header("WiFi WPA Full Suite", "No Password Cracked!")
+        if capture == None:
+            utils.header("WiFi WPA Full Suite", "No target WiFi selected")
         else:
-            utils.header("WiFi WPA Full Suite", "Cracked Password: " + password)
+            filename = capture[1]
+            wifi = capture[0]
+            password = wpa_cracking(filename, wifi)
+            if password == None or password == "":
+                utils.header("WiFi WPA Full Suite", "No Password Cracked!")
+            else:
+                utils.header("WiFi WPA Full Suite", "Cracked Password: " + password)
         utils.getch()
 
 #WPA Cracking
