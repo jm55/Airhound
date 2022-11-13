@@ -49,16 +49,31 @@ lshw subprocess formatted as JSON, example are as follows:
 ]
 '''
 
-def refresh(device_prefix:str):
-    '''
-        UPDATE device["logicalname"] HERE IF THE 'mon' SUFFIX IS DETECTED AFTER AIRMON-NG STARTS
-        
-        CHECK IF device LOGICALNAME CHANGED AFTER airmon_ng SUBPROCESS TO ONE WITH 'mon' SUFFIX
-        AND UPDATE ACCORDINGLY
+def refresh(device):
+    if device == None:
+        return None
 
-        PROCESS SIMILAR TO SCAN BUT CHECK AND RETURN ONE THAT MATCHES DEVICE_PREFIX
+    curr_logicalname = get_logicalname(device)
+    if "mon" in device_prefix: #removing mon prefix for disabling process; should work regardless
+        print(a[0:len(a)-3])
     '''
-    return None
+        Check if device logicalname changed after iwconfig subprocess to one with 'mon' suffix and update accordingly
+
+        Process similar to scan
+
+        But instead, do command: [sudo lshw -class network -quiet -json | grep <device_prefix>] 
+        E.G. 
+        Command: sudo lshw -class network -quiet -json | grep
+        Output: "logicalname" : "wlan1",
+
+        Trim the output however you want as long as it will extract the format 'wlan#mon' or 'wlan#' (depending on outcome)
+
+        If result of command equals or contains the device prefix the update logicalname by doing: 
+        device["logicalname"] = <some function/variable that trims the output cmd>
+        
+        Return device whether updated or not
+    '''
+    return device
 
 #Retrieves network devices using lshw shell command.
 def scan():
@@ -201,7 +216,7 @@ def enable_monitor(device, channel=""):
     else:
         steps.append("iwconfig " + orig_logicalname + " mode monitor")
 
-    revised_device = refresh(orig_logicalname)
+    revised_device = refresh(device)
     if revised_device != None:
         device = revised_device
 
@@ -230,7 +245,7 @@ def disable_monitor(device):
     steps.append("ifconfig " + logicalname + " up")
     
     ''' DON'T OPEN JUST YET
-    revised_device = refresh(logicalname)
+    revised_device = refresh(device)
     if revised_device != None:
         device = revised_device
     '''
