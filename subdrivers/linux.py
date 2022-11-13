@@ -21,6 +21,7 @@ LINUX SUBDRIVER MODULE
 
 import utils.utils as utils
 import utils.converters as converters
+import utils.benchmark as benchmark
 import interfaces.interfaces as interface
 import wifi.scanning.wpascan as wpascan
 import wifi.capture.wpacapture as wpacapture
@@ -120,8 +121,8 @@ def run():
 #Utilities
 def utilities():
     utils.header("Utilities")
-    int_mode = ["1","2","0"]
-    str_mode = ["HashCat Capture File Conversion", "HashCat 3.6 Capture File Conversion", "Exit"]
+    int_mode = ["1","2","3","0"]
+    str_mode = ["HashCat Capture File Conversion", "HashCat 3.6 Capture File Conversion", "WPA Cracking Benchmark", "Exit"]
 
     mode = ""
     while True:
@@ -134,6 +135,8 @@ def utilities():
         utils.header("HashCat Capture File Conversion Result", "Output file: " + converters.cap_to_HS())
     elif mode == "2":
         utils.header("HashCat 3.6 Capture File Conversion Result", "Output file: " + converters.cap_to_HS3())
+    elif mode == "3":
+        benchmark.wpa_cracking_benchmark()
     utils.getch()
 
 #Full Suite WPA
