@@ -39,6 +39,15 @@ def run():
     wlan_device = None #type json; refer to interfaces.get_interface()
     capture_filename = None #type str
 
+    utils.header("Checking dependencies...")
+    if not utils.find_dependencies():
+        utils.header("Missing Dependencies", utils.dependency_list())
+        utils.getch()
+        exit(0)
+    else:
+        utils.header("All dependencies installed!")
+    utils.getch()
+
     utils.confirm(utils.running_OS())
     invalid = True
     wlan_device = interface.get_interface()

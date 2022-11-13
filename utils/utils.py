@@ -149,7 +149,7 @@ def win_check():
 
 #Show confirm message and ask for getch()
 def confirm(message):
-    header("CONFIRM",message)
+    header("CONFIRM", message)
     getch()
 
 #Get OS in str format
@@ -392,3 +392,24 @@ def find_iterations(charset, min, max):
         iterations += pow(len(charset),min)
         min += 1
     return iterations
+
+def dependency_list():
+    return ["iwconfig", "ifconfig", "aircrack-ng", "airodump-ng", "cowpatty", "crunch", "reaver", "wash"]
+
+#@TODO Dependency Application Checking
+def find_dependencies():
+    dependencies = dependency_list()
+    '''
+    Scan the Linux machine of the necessary applications that should be 
+    installed prior to the launch of the tool. 
+    This will be used on the startup part of the Linux subdriver.
+
+    Create a function (with no parameters required) that will scan for installed tools on the system. These tools are:
+    a. iwconfig
+    b. aircrack-ng
+    c. airmon-ng
+    d. cowpatty
+    
+    Simply return true if all the listed programs are found and return false if otherwise.
+    '''
+    return True #Default and ideal situation
