@@ -76,7 +76,7 @@ def brute_attack(filename: str, wifi:dict):
     select_char = True
     while select_char:
         if brute_choice == "1":
-            utils.header("WPA Cracking (Bruteforce Attack)", "Custom Charset")
+            utils.header("WPA Cracking (Bruteforce Attack)", ["Custom Charset", charset])
             charset = input("Enter your custom charset here: ")
             select_char = False
         elif brute_choice == "2":
