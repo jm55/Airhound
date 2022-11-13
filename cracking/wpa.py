@@ -101,6 +101,7 @@ def brute_attack(filename: str, wifi:dict):
             return ""
 
     #Ask for string sizes (min and max)
+    #@TODO Update the input process where an input situation of start >= end is not allowed.
     start = 0
     end = 0
     start_valid = False
