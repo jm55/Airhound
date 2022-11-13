@@ -49,6 +49,17 @@ lshw subprocess formatted as JSON, example are as follows:
 ]
 '''
 
+def refresh(device_prefix:str):
+    '''
+        UPDATE device["logicalname"] HERE IF THE 'mon' SUFFIX IS DETECTED AFTER AIRMON-NG STARTS
+        
+        CHECK IF device LOGICALNAME CHANGED AFTER airmon_ng SUBPROCESS TO ONE WITH 'mon' SUFFIX
+        AND UPDATE ACCORDINGLY
+
+        PROCESS SIMILAR TO SCAN BUT CHECK AND RETURN ONE THAT MATCHES DEVICE_PREFIX
+    '''
+    return None
+
 #Retrieves network devices using lshw shell command.
 def scan():
     #With help from https://stackoverflow.com/a/50303518
@@ -180,24 +191,21 @@ def restart_services():
 
 #Enable monitor mode for specified device
 def enable_monitor(device, channel=""):
-    logicalname = get_logicalname(device)
-    if logicalname == "":
+    orig_logicalname = get_logicalname(device)
+    if orig_logicalname == "":
         return False
     
-    steps = ["ifconfig " + logicalname + " down"]
+    steps = ["ifconfig " + orig_logicalname + " down"]
     if channel != "":
-        steps.append("iwconfig " + logicalname + " mode monitor channel " + channel)
+        steps.append("iwconfig " + orig_logicalname + " mode monitor channel " + channel)
     else:
-        steps.append("iwconfig " + logicalname + " mode monitor")
+        steps.append("iwconfig " + orig_logicalname + " mode monitor")
 
-    '''
-        UPDATE device["logicalname"] HERE IF THE 'mon' SUFFIX IS DETECTED AFTER AIRMON-NG STARTS
-        
-        CHECK IF device LOGICALNAME CHANGED AFTER airmon_ng SUBPROCESS TO ONE WITH 'mon' SUFFIX
-        AND UPDATE ACCORDINGLY
-    '''
+    revised_device = refresh(orig_logicalname)
+    if revised_device != None:
+        device = revised_device
 
-    steps.append("ifconfig " + logicalname + " up")
+    steps.append("ifconfig " + orig_logicalname + " up")
     for s in steps:
         process = subprocess.Popen(s, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         process.wait()
@@ -219,13 +227,14 @@ def disable_monitor(device):
                 
             ]
 
-    '''
-        CHECK device["logicalname"] 
-        IF IT CONTAINS 'mon' SUFFIX, REMOVE IF SO
-    '''
-
     steps.append("ifconfig " + logicalname + " up")
     
+    ''' DON'T OPEN JUST YET
+    revised_device = refresh(logicalname)
+    if revised_device != None:
+        device = revised_device
+    '''
+
     for s in steps:
         process = subprocess.Popen(s, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         process.wait()
