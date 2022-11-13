@@ -22,6 +22,16 @@ UTILITY CONVERTERS MODULE
 import subprocess
 import utils.utils as utils
 
+def cap_to_EWSA():
+    filename = ""
+    output_filename = ""
+    '''
+    Do similar to other cap_to_###()
+
+    Command: Use -E instead of -J or -j
+    '''
+    return output_filename 
+
 def cap_to_HS():
     filename = ""
     while True:
