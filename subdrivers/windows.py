@@ -19,7 +19,6 @@
 WINDOWS SUBDRIVER MODULE
 '''
 
-from numpy import int_, str_
 import utils.utils as utils
 import subprocess
 import re
