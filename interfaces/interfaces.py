@@ -82,7 +82,13 @@ def scan():
     lshw.wait()
     data, err = lshw.communicate()
     if lshw.returncode == 0:
-        return json.loads(data.decode("utf-8"))
+        raw_net_interfaces = json.loads(data.decode("utf-8"))
+        wlan_list = []
+        for r in raw_net_interfaces:
+            logicalname = get_logicalname(r)
+            if "wlan" in logicalname:
+                wlan_list.append(r)
+        return wlan_list 
     else:  
         print("Error: " + str(err))
         return None
