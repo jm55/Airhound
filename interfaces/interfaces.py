@@ -54,7 +54,7 @@ def refresh(device):
         return None
 
     curr_logicalname = get_logicalname(device)
-    if "mon" in device_prefix: #removing mon prefix for disabling process; should work regardless
+    if "mon" in curr_logicalname: #removing mon prefix for disabling process; should work regardless
         print(a[0:len(a)-3])
     '''
         Check if device logicalname changed after iwconfig subprocess to one with 'mon' suffix and update accordingly
