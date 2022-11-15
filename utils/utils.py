@@ -42,10 +42,10 @@ about_content = [   "===========================================================
                     "                   able to do Wi-Fi scanning, cracking, ".ljust(62),
                     "                   and admin control access.".ljust(62), 
                     "      Objective Functionalities:".ljust(62),
-                    "         1. WiFi Scanning & Handshake Capture".ljust(62),
-                    "         2. WiFi Cracking", 
-                    "         3. WAP/Router Admin Control Access".ljust(62),
-                    "         4. WiFi DOS".ljust(62),
+                    "         1. WPA Scanning & Handshake Capture".ljust(62),
+                    "         2. WPA Cracking", 
+                    "         3. WiFi DOS".ljust(62),
+                    "         4. Other Tools".ljust(62),
                     "         5. Windows Saved WiFi Passwords (if on Windows)".ljust(62),
                     "=============================================================="
                 ]
