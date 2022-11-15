@@ -111,7 +111,12 @@ def brute_attack(filename: str, wifi:dict):
             utils.cls()
             utils.header("WPA Cracking (Bruteforce Attack)","Configuration")
             start = int(input("Enter minimum number of characters: "))
-            start_valid = True
+            if start <= 0:
+                start_valid = False
+                if not utils.yesNo("WPA Cracking (Bruteforce Attack)", ["Invalid value for minimum number of characters."], "Retry?", True):
+                    return ""
+            else:
+                start_valid = True
         except ValueError:
             utils.cls()
     while not end_valid:
@@ -119,7 +124,12 @@ def brute_attack(filename: str, wifi:dict):
             utils.cls()
             utils.header("WPA Cracking (Bruteforce Attack)","Configuration")
             end = int(input("Enter maximum number of characters: "))
-            end_valid = True
+            if end <= start or end <= 0:
+                end_valid = False
+                if not utils.yesNo("WPA Cracking (Bruteforce Attack)", ["Invalid value for maximum number of characters."], "Retry?", True):
+                    return ""
+            else:
+                end_valid = True
         except ValueError:
             utils.cls()
 
