@@ -80,22 +80,69 @@ def brute_attack(filename: str, wifi:dict):
             charset = input("Enter your custom charset here: ")
             select_char = False
         elif brute_choice == "2":
-            int_preset = ["1", "2", "3", "4", "0"]
-            str_preset = ["lowercase letters", "UPPERCASE letters", "Numbers", "Symbols","Finished"]
+            int_preset = ["1", "2", "3", "4", "5", "0"]
+            str_preset = ["lowercase letters", "UPPERCASE letters", "Numbers", "Symbols", "*Undo","*Finished"]
+            preset_switch = [False, False, False, False]
+            last_selected = "" 
             while True:
-                utils.header("WPA Cracking (Bruteforce Attack)", ["Charset Preset Selector",charset])
+                utils.header("WPA Cracking (Bruteforce Attack)", ["Charset Preset Selector: ",charset])
                 preset_choice = utils.menu(int_preset, str_preset)
                 if utils.valid_choice(preset_choice, int_preset):
                     if preset_choice == "0":
                         break
                     elif preset_choice == "1":
-                        charset += "abcdefghijklmnopqrstuvwxyz"
+                        last_selected = "1"
+                        if preset_switch[0] is True:
+                            utils.header("WPA Cracking (Bruteforce Attack)", ["Charset Preset Selector:", charset, "", "Charset is already included: lowercase letters"])
+                            utils.getch()
+                        else:
+                            preset_switch[0] = not preset_switch[0]
+                            charset += "abcdefghijklmnopqrstuvwxyz"
+
                     elif preset_choice == "2":
-                        charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        last_selected = "2"
+                        if preset_switch[1] is True:
+                            utils.header("WPA Cracking (Bruteforce Attack)", ["Charset Preset Selector:", charset, "", "Charset is already included: UPPERCASE letters"])
+                            utils.getch()
+                        else:
+                            preset_switch[1] = not preset_switch[1]
+                            charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
                     elif preset_choice == "3":
-                        charset += "0123456789"
+                        last_selected = "3"
+                        if preset_switch[2] is True:
+                            utils.header("WPA Cracking (Bruteforce Attack)", ["Charset Preset Selector:", charset, "", "Charset is already included: Numbers"])
+                            utils.getch()
+                        else:
+                            preset_switch[2] = not preset_switch[2]
+                            charset += "0123456789"
+
                     elif preset_choice == "4":
-                        charset += "~`! @#$%^&*()_-+={[}]|\:;\"\'<,>.?/"
+                        last_selected = "4"
+                        if preset_switch[3] is True:
+                            utils.header("WPA Cracking (Bruteforce Attack)", ["Charset Preset Selector:", charset, "", "Charset is already included: Symbols"])
+                            utils.getch()
+                        else:
+                            preset_switch[3] = not preset_switch[3]
+                            charset += "~`! @#$%^&*()_-+={[}]|\:;\"\'<,>.?/"
+
+                    elif preset_choice == "5":
+                        if len(charset) > 0:
+                            match last_selected:
+                                case "1":
+                                    charset = charset.replace("abcdefghijklmnopqrstuvwxyz","")
+                                case "2":
+                                    charset = charset.replace("ABCDEFGHIJKLMNOPQRSTUVWXYZ","")
+                                case "3":
+                                    charset = charset.replace("0123456789","")
+                                case "4":
+                                    charset = charset.replace("~`! @#$%^&*()_-+={[}]|\:;\"\'<,>.?/","")
+                            utils.header("WPA Cracking (Bruteforce Attack)", ["Charset Preset Selector:", charset, "", "Charset removed."])
+                            utils.getch()
+                        else:
+                            utils.header("WPA Cracking (Bruteforce Attack)", ["", "No charset has been included yet!"])
+                            utils.getch()
+
             select_char = False
         else: #0
             return ""
