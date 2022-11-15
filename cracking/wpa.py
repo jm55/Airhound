@@ -131,12 +131,16 @@ def brute_attack(filename: str, wifi:dict):
                             match last_selected:
                                 case "1":
                                     charset = charset.replace("abcdefghijklmnopqrstuvwxyz","")
+                                    preset_switch[0] = False
                                 case "2":
                                     charset = charset.replace("ABCDEFGHIJKLMNOPQRSTUVWXYZ","")
+                                    preset_switch[1] = False
                                 case "3":
                                     charset = charset.replace("0123456789","")
+                                    preset_switch[2] = False
                                 case "4":
                                     charset = charset.replace("~`! @#$%^&*()_-+={[}]|\:;\"\'<,>.?/","")
+                                    preset_switch[3] = False
                             utils.header("WPA Cracking (Bruteforce Attack)", ["Charset Preset Selector:", charset, "", "Charset removed."])
                             utils.getch()
                         else:
