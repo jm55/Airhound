@@ -341,7 +341,10 @@ def simplify_wifi_list(wifi_list: list, wps:False):
     return filtered
 
 def valid_mac(mac_address:str): #https://stackoverflow.com/a/7629690
-    return re.match("[0-9a-f]{2}([-:]?)[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$", mac_address.lower())
+    match = re.match("[0-9a-f]{2}([-:]?)[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$", mac_address.lower())
+    if match != None:
+        return True
+    return False
 
 def valid_ip(ip_str):
     try:
