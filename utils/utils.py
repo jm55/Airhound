@@ -9,10 +9,10 @@
                      able to do Wi-Fi scanning, cracking, 
                      and admin control access.
         Objective Functionalities:
-            1. WiFi Scanning & Handshake Capture
-            2. WiFi Cracking
-            3. WAP/Router Admin Control Access
-            4. WiFi DOS
+            1. WPA Scanning & Handshake Capture
+            2. WPA Cracking
+            3. WiFi DOS
+            4. Other Tools
             5. Windows Saved WiFi Passwords
 ============================================================
 
@@ -42,10 +42,10 @@ about_content = [   "===========================================================
                     "                   able to do Wi-Fi scanning, cracking, ".ljust(62),
                     "                   and admin control access.".ljust(62), 
                     "      Objective Functionalities:".ljust(62),
-                    "         1. WiFi Scanning & Handshake Capture".ljust(62),
-                    "         2. WiFi Cracking", 
-                    "         3. WAP/Router Admin Control Access".ljust(62),
-                    "         4. WiFi DOS".ljust(62),
+                    "         1. WPA Scanning & Handshake Capture".ljust(62),
+                    "         2. WPA Cracking", 
+                    "         3. WiFi DOS".ljust(62),
+                    "         4. Other Tools".ljust(62),
                     "         5. Windows Saved WiFi Passwords (if on Windows)".ljust(62),
                     "=============================================================="
                 ]
@@ -341,7 +341,10 @@ def simplify_wifi_list(wifi_list: list, wps:False):
     return filtered
 
 def valid_mac(mac_address:str): #https://stackoverflow.com/a/7629690
-    return re.match("[0-9a-f]{2}([-:]?)[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$", mac_address.lower())
+    match = re.match("[0-9a-f]{2}([-:]?)[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$", mac_address.lower())
+    if match != None:
+        return True
+    return False
 
 def valid_ip(ip_str):
     try:

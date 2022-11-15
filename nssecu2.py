@@ -9,10 +9,10 @@
                      able to do Wi-Fi scanning, cracking, 
                      and admin control access.
         Objective Functionalities:
-            1. WiFi Scanning & Handshake Capture
-            2. WiFi Cracking
-            3. WAP/Router Admin Control Access
-            4. WiFi DOS
+            1. WPA Scanning & Handshake Capture
+            2. WPA Cracking
+            3. WiFi DOS
+            4. Other Tools
             5. Windows Saved WiFi Passwords
 ============================================================
 '''
