@@ -152,3 +152,4 @@ cython_debug/
 #.idea/
 
 rockyou.txt
+/.vs

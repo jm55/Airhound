@@ -20,6 +20,7 @@ LINUX SUBDRIVER MODULE
 '''
 
 import utils.utils
+import subprocess
 
 def wpa_cracking_benchmark():
     score = "0"
@@ -29,8 +30,6 @@ def wpa_cracking_benchmark():
         try:
             utils.header("WPA Cracking Benchmark (via Aircrack-ng CPU)","Allowed benchmark time: 15s to 300s")
             time = int(input("Enter benchmark time: "))
-            score = benchmark.wpa_cracking_benchmark(time) #in k/s (keys/second)
-            
             break
         except ValueError:
             print()
@@ -47,7 +46,15 @@ def wpa_cracking_benchmark():
     
     Retrieve the last output via subprocess.communicate()
     '''
-
+    if time < 15:
+        time = 15
+    elif time > 300:
+        time = 300
+    benchmark_process = subprocess.Popen("sudo aircrack-ng -S -Z " + str(time), shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, bufsize=1) 
+    benchmark_process.wait()
+    res, err = benchmark_process.communicate()
+    score_list = res.splitlines()
+    score = score_list[-1].strip()
     #DISPLAY/OUTPUT
     utils.header("WPA Cracking Benchmark (via Aircrack-ng CPU)","Benchmark score: " + score)
     utils.getch()
