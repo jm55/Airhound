@@ -24,13 +24,20 @@ import utils.utils as utils
 
 def cap_to_EWSA():
     filename = ""
-    output_filename = ""
-    '''
-    Do similar to other cap_to_###()
+    while True:
+        utils.header("Utility Converter", ["Convert captured file to EWSA",".cap to .ewsa"])
+        filename = input("Enter filename: ")
+        if filename.strip() != "":
+            break
+    if ".cap" not in filename:
+        filename += ".cap"
 
-    Command: Use -E instead of -J or -j
-    '''
-    return output_filename 
+    hcap = "aircrack-ng -E hashcat " + filename
+    subprocess.Popen(hcap, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).wait()
+    
+    output_filename = filename[:len(filename)-4] + ".ewsa"
+    subprocess.Popen("mv hashcat.ewsa " + output_filename, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).wait()
+    return output_filename
 
 def cap_to_HS():
     filename = ""
