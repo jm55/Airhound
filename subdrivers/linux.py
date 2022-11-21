@@ -147,7 +147,8 @@ def utilities():
     elif mode == "3":
         utils.header("Create EWSA Project File", "Output file: " + converters.cap_to_EWSA())
     elif mode == "4":
-        benchmark.wpa_cracking_benchmark()
+        benchmark_score = benchmark.wpa_cracking_benchmark()
+        utils.header("WPA Cracking Benchmark (via Aircrack-ng CPU)","Benchmark score: " + benchmark_score)
     utils.getch()
 
 #Full Suite WPA
