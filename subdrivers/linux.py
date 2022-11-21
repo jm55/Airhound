@@ -88,7 +88,7 @@ def run():
                     elif choice == "3": #FULL SUITE (WIFI SCAN+CAPTURE & WIFI CRACKING)
                         fullsuite(wlan_device)
                     elif choice == "4": #WPS SCAN+CRACK
-                        wps_halted = False
+                        wps_halted = True
                         
                         if not wps_halted:
                             utils.header("WPS Scan + Cracking", ["Note","This feature of the program is not guaranteed to work all", " the time due to WAPs having protection against Reaver attacks."])
