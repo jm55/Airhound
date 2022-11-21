@@ -397,7 +397,7 @@ def find_iterations(charset, min, max):
     return iterations
 
 def dependency_list():
-    return ["iwconfig", "ifconfig", "aircrack-ng", "airodump-ng", "cowpatty", "crunch", "reaver", "wash"]
+    return ["iwconfig", "ifconfig", "lshw", "aircrack-ng", "airodump-ng", "cowpatty", "crunch", "reaver", "wash"]
 
 #@TODO Dependency Application Checking
 def find_dependencies():
@@ -407,11 +407,8 @@ def find_dependencies():
     installed prior to the launch of the tool. 
     This will be used on the startup part of the Linux subdriver.
 
-    Create a function (with no parameters required) that will scan for installed tools on the system. These tools are:
-    a. iwconfig
-    b. aircrack-ng
-    c. airmon-ng
-    d. cowpatty
+    Create a function (with no parameters required) that will scan for installed tools on the system. 
+    Refer to dependency_list() for the list of tools required.
     
     Simply return true if all the listed programs are found and return false if otherwise.
     '''
