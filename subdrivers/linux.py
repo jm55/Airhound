@@ -54,7 +54,7 @@ def run():
     int_choices = ["1","2","3","4","5","6","7","0"]
     str_choices = [ "WPA Scan & Capture", "WPA Cracking",
                     "WPA Full Suite (Scan & Capture + Crack)","WPS Scan and Crack BETA", 
-                    "WiFi DOS", "Select WLAN Device","Utilities","Exit"]
+                    "WiFi DOS/Deauth", "Select WLAN Device","Utilities","Exit"]
     while invalid:
         desc = "WLAN Device Selected: " + str(interface.get_logicalname(wlan_device) + " (" + str(interface.get_driver(wlan_device)) + ")")
         utils.header("Tools Menu", desc)   
@@ -202,4 +202,4 @@ def wps_scan(wlan_device):
 #WiFi DOS
 def wifi_dos(wlan_device):
     deauth.wifi_dos(wlan_device)
-    utils.display_countdown("WiFi DOS (Deauth) Attack", "Stopping deauth attack...", 5)
+    utils.display_countdown("WiFi DOS/Deauth Attack", "Stopping DOS/Deauth attack...", 5)
