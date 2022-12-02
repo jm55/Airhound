@@ -54,7 +54,7 @@ def run():
     int_choices = ["1","2","3","4","5","6","7","0"]
     str_choices = [ "WPA Scan & Capture", "WPA Cracking",
                     "WPA Full Suite (Scan & Capture + Crack)","WPS Scan and Crack BETA", 
-                    "WiFi DOS", "Select WLAN Device","Utilities","Exit"]
+                    "WiFi DOS/Deauth", "Select WLAN Device","Utilities","Exit"]
     while invalid:
         desc = "WLAN Device Selected: " + str(interface.get_logicalname(wlan_device) + " (" + str(interface.get_driver(wlan_device)) + ")")
         utils.header("Tools Menu", desc)   
@@ -88,7 +88,7 @@ def run():
                     elif choice == "3": #FULL SUITE (WIFI SCAN+CAPTURE & WIFI CRACKING)
                         fullsuite(wlan_device)
                     elif choice == "4": #WPS SCAN+CRACK
-                        wps_halted = False
+                        wps_halted = True
                         
                         if not wps_halted:
                             utils.header("WPS Scan + Cracking", ["Note","This feature of the program is not guaranteed to work all", " the time due to WAPs having protection against Reaver attacks."])
@@ -145,9 +145,10 @@ def utilities():
     elif mode == "2":
         utils.header("HashCat 3.6 Capture File Conversion Result", "Output file: " + converters.cap_to_HS3())
     elif mode == "3":
-        utils.header("Create EWSA Project File", "Output file: " + converters.cap_to_EWSA())
+        utils.header("Create EWSA Project File", "Output file: " + converters.cap_to_WKP())
     elif mode == "4":
-        benchmark.wpa_cracking_benchmark()
+        benchmark_score = benchmark.wpa_cracking_benchmark()
+        utils.header("WPA Cracking Benchmark (via Aircrack-ng CPU)","Benchmark score: " + benchmark_score)
     utils.getch()
 
 #Full Suite WPA
@@ -201,4 +202,4 @@ def wps_scan(wlan_device):
 #WiFi DOS
 def wifi_dos(wlan_device):
     deauth.wifi_dos(wlan_device)
-    utils.display_countdown("WiFi DOS (Deauth) Attack", "Stopping deauth attack...", 5)
+    utils.display_countdown("WiFi DOS/Deauth Attack", "Stopping DOS/Deauth attack...", 5)

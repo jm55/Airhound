@@ -22,15 +22,22 @@ UTILITY CONVERTERS MODULE
 import subprocess
 import utils.utils as utils
 
-def cap_to_EWSA():
+def cap_to_WKP():
     filename = ""
-    output_filename = ""
-    '''
-    Do similar to other cap_to_###()
+    while True:
+        utils.header("Utility Converter", ["Convert captured file to WKP",".cap to .wkp"])
+        filename = input("Enter filename: ")
+        if filename.strip() != "":
+            break
+    if ".cap" not in filename:
+        filename += ".cap"
 
-    Command: Use -E instead of -J or -j
-    '''
-    return output_filename 
+    wkp = "aircrack-ng -e hashcat " + filename
+    subprocess.Popen(hcap, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).wait()
+    
+    output_filename = filename[:len(filename)-4] + ".wkp"
+    subprocess.Popen("mv hashcat.wkp " + output_filename, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).wait()
+    return output_filename
 
 def cap_to_HS():
     filename = ""
