@@ -412,4 +412,32 @@ def find_dependencies():
     
     Simply return true if all the listed programs are found and return false if otherwise.
     '''
-    return True #Default and ideal situation
+    # ls and grep command for checking packages in /usr/bin/
+    ls_bin_cmd = "ls /usr/bin/" + " | " + "grep -E lshw\|aircrack-ng\|cowpatty\|crunch\|reaver\|wash"
+    ls_bin_process = subprocess.Popen(ls_bin_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    res, err = ls_bin_process.communicate()
+    bin_list = str(res.decode("utf-8")+"").split()
+
+    # ls and grep command for checking packages in /usr/sbin/
+    ls_sbin_cmd = "ls /usr/sbin/" + " | " + "grep -E " + "ifconfig\|iwconfig\|airodump-ng\|aireplay-ng"
+    ls_sbin_process = subprocess.Popen(ls_sbin_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    res, err = ls_sbin_process.communicate()
+    sbin_list = str(res.decode("utf-8")+"").split()
+
+    # combined list of existing packages
+    exist_list = bin_list + sbin_list
+
+    # generated list of required dependencies
+    req_list = dependency_list()
+    
+    # list for missing dependencies
+    miss_list = []
+
+    for req in req_list:
+        if req not in exist_list:
+            miss_list.append(req)
+    
+    if len(miss_list) > 0:
+        return miss_list
+
+    return True #No missing dependencies

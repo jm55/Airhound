@@ -41,7 +41,7 @@ def run():
 
     utils.header("Checking dependencies...")
     if not utils.find_dependencies():
-        utils.header("Missing Dependencies", utils.dependency_list())
+        utils.header("Missing Dependencies", utils.find_dependencies())
         utils.getch()
         exit(0)
     else:
