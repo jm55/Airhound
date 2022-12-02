@@ -39,15 +39,23 @@ def run():
     wlan_device = None #type json; refer to interfaces.get_interface()
     capture_filename = None #type str
 
+    missing = utils.find_dependencies()
     utils.header("Checking dependencies...")
-    if not utils.find_dependencies():
-        utils.header("Missing Dependencies", utils.dependency_list())
-        utils.getch()
-        exit(0)
-    else:
-        utils.header("All dependencies installed!")
-    utils.getch()
-
+    while missing != None:
+        if type(missing) != None:
+            utils.header("Missing Dependencies",["Install these first before proceeding,","otherwise tool won't be functional.",""]+missing)
+        else:
+            utils.header("All dependencies installed!")
+        int_dependencies = [1,2,0]
+        str_dependencies = ["Proceed Regardless", "Refresh", "Exit"]
+        choice = utils.menu(int_dependencies, str_dependencies)
+        if choice == "1":
+            break #Discard warnings, preferable if missing only a part of the tools
+        elif choice == "2":
+            missing = utils.find_dependencies() #Refresh items if user installs it amidst the use of the tool
+        elif choice == "0":
+            exit(0) #Safe exit
+        
     utils.confirm(utils.running_OS())
     invalid = True
     wlan_device = interface.get_interface()
