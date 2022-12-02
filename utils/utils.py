@@ -401,7 +401,6 @@ def dependency_list():
 
 #@TODO Dependency Application Checking
 def find_dependencies():
-    dependencies = dependency_list()
     '''
     Scan the Linux machine of the necessary applications that should be 
     installed prior to the launch of the tool. 
@@ -422,7 +421,7 @@ def find_dependencies():
     ls_sbin_cmd = "ls /usr/sbin/" + " | " + "grep -E " + "ifconfig\|iwconfig\|airodump-ng\|aireplay-ng"
     ls_sbin_process = subprocess.Popen(ls_sbin_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     res, err = ls_sbin_process.communicate()
-    sbin_list = str(res.decode("utf-8")+"").split()
+    sbin_list = str(res.decode("utf-8")+"").split("\n")
 
     # combined list of existing packages
     exist_list = bin_list + sbin_list
@@ -440,4 +439,4 @@ def find_dependencies():
     if len(miss_list) > 0:
         return miss_list
 
-    return True #No missing dependencies
+    return None #No missing dependencies
