@@ -127,6 +127,13 @@ def brute_attack(filename: str, wifi:dict):
                             charset += "~`! @#$%^&*()_-+={[}]|\:;\"\'<,>.?/"
 
                     elif preset_choice == "5":
+                        # # for checking if user attempts to spam 'Undo' option
+                        # if last_selected == "5" and len(charset) > 0:
+                        #     utils.header("WPA Cracking (Bruteforce Attack)", ["Charset Preset Selector:", charset, "", "Cannot undo changes more than once!"])
+                        #     utils.getch()
+                        # else:
+                        #     last_selected = "5"
+
                         if len(charset) > 0:
                             match last_selected:
                                 case "1":
