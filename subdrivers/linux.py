@@ -43,7 +43,7 @@ def run():
     utils.header("Checking dependencies...")
     while missing != None:
         if type(missing) != None:
-            utils.header("Missing Dependencies",["Install these first before proceeding,","otherwise tool won't be functional.",""]+missing)
+            utils.header("Missing Dependencies",["Install these first before proceeding,","the tool will otherwise might be nonfunctional.",""]+missing)
         else:
             utils.header("All dependencies installed!")
         int_dependencies = [1,2,0]
