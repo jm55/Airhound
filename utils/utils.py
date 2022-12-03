@@ -30,10 +30,11 @@ import re
 import time
 import ipaddress
 
-title = "NSSECU2 Hacking Tool"
+title = "Airhound"
 test = ["1","2","3"]
 about_content = [   "==============================================================", 
                     "                NSSECU2 - Hacking Tool Project", 
+                    "                             airhound                         ", 
                     "==============================================================",
                     "      Members: Escalona, Fadrigo, Fortiz, Manzano, Sy".ljust(62),
                     "      Topic: WiFi Hacking Tool".ljust(62), 
