@@ -258,7 +258,7 @@ def dict_attack(filename: str):
     #Retrieve result
     res, err = aircrackng.communicate()
     raw = str(res.decode("utf-8")+"").split()
-    password = str(raw[3])
+    password = str(raw[len(raw)-2])
 
     return password
 
