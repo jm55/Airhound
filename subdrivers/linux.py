@@ -29,6 +29,7 @@ import wifi.scanning.wpsscan as wpsscan
 import cracking.wpa as wpacracking
 import cracking.wps as wpscracking
 import deauth.deauth as deauth
+import bluetooth.bt as bt
 import time
 import json
 
@@ -43,7 +44,7 @@ def run():
     utils.header("Checking dependencies...")
     while missing != None:
         if type(missing) != None:
-            utils.header("Missing Dependencies",["Install these first before proceeding,","otherwise tool won't be functional.",""]+missing)
+            utils.header("Missing Dependencies",["Install these first before proceeding,","the tool will otherwise might be nonfunctional.",""]+missing)
         else:
             utils.header("All dependencies installed!")
         int_dependencies = [1,2,0]
@@ -59,10 +60,10 @@ def run():
     utils.confirm(utils.running_OS())
     invalid = True
     wlan_device = interface.get_interface()
-    int_choices = ["1","2","3","4","5","6","7","0"]
+    int_choices = ["1","2","3","4","5","6","7","8","0"]
     str_choices = [ "WPA Scan & Capture", "WPA Cracking",
                     "WPA Full Suite (Scan & Capture + Crack)","WPS Scan and Crack BETA", 
-                    "WiFi DOS/Deauth", "Select WLAN Device","Utilities","Exit"]
+                    "WiFi DOS/Deauth", "Select WLAN Device","Utilities","Bluetooth BETA","Exit"]
     while invalid:
         desc = "WLAN Device Selected: " + str(interface.get_logicalname(wlan_device) + " (" + str(interface.get_driver(wlan_device)) + ")")
         utils.header("Tools Menu", desc)   
@@ -132,6 +133,8 @@ def run():
                 wlan_device = interface.get_interface()
             elif choice == "7": #UTILITIES
                 utilities()
+            elif choice == "8":
+                bt.bt_driver()
             interface.disable_monitor(wlan_device)
     exit(0)
 
