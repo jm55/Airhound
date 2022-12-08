@@ -38,7 +38,7 @@ def wifi_dos(device):
     if utils.yesNo("WiFi DOS/Deauth Attack","Configure WiFi Deauth Parameters","Use Host Specific Mode?", False):
         while invalid_mac:
             utils.header("WiFi DOS/Deauth Attack", "Host Specific Mode Configuration")
-            target_host = input("Enter MAC address of target device (Fformat: AA:BB:CC:DD:EE:FF): ").upper()
+            target_host = input("Enter MAC address of target device (Format: AA:BB:CC:DD:EE:FF): ").upper()
             if utils.valid_mac(target_host):
                 invalid_mac = False
         utils.header("WiFi DOS/Deauth Attack", "Note that configuration is set to Host Specific Mode mode and will target " + target_host.upper() + ".")
