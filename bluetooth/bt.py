@@ -27,7 +27,7 @@ import bluetooth.BlueEyesTarget as BlueEyesTarget
 import sys
 
 def printBanner():
-
+    utils.cls()
     print("===========================================")
     print('\033[0;34m' + "  ____  _            ______                ")
     print(" |  _ \| |          |  ____|               ")
