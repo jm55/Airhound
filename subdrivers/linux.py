@@ -30,6 +30,8 @@ import cracking.wpa as wpacracking
 import cracking.wps as wpscracking
 import deauth.deauth as deauth
 import bluetooth.bt as bt
+#import bluetooth.BlueEyesAllTargets
+#import bluetooth.BlueEyesTarget
 import time
 import json
 
@@ -63,7 +65,7 @@ def run():
     int_choices = ["1","2","3","4","5","6","7","8","0"]
     str_choices = [ "WPA Scan & Capture", "WPA Cracking",
                     "WPA Full Suite (Scan & Capture + Crack)","WPS Scan and Crack BETA", 
-                    "WiFi DOS/Deauth", "Select WLAN Device","Utilities","Bluetooth BETA","Exit"]
+                    "WiFi DOS/Deauth", "Select WLAN Device","Utilities","Bluetooth BETA (Reconnaissance only)","Exit"]
     while invalid:
         desc = "WLAN Device Selected: " + str(interface.get_logicalname(wlan_device) + " (" + str(interface.get_driver(wlan_device)) + ")")
         utils.header("Tools Menu", desc)   
