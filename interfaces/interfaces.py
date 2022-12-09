@@ -14,6 +14,7 @@
             3. WiFi DOS
             4. Other Tools
             5. Windows Saved WiFi Passwords
+            6. Bluetooth Reconnaissance
 ============================================================
 
 WLAN INTERFACE SEARCH MODULE

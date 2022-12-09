@@ -14,6 +14,7 @@
             3. WiFi DOS
             4. Other Tools
             5. Windows Saved WiFi Passwords
+            6. Bluetooth Reconnaissance
 ============================================================
 
 UTILITIES MODULE
@@ -48,6 +49,7 @@ about_content = [   "===========================================================
                     "         3. WiFi DOS".ljust(62),
                     "         4. Other Tools".ljust(62),
                     "         5. Windows Saved WiFi Passwords (if on Windows)".ljust(62),
+                    "         6. Bluetooth Reconnaissance".ljust(62),
                     "=============================================================="
                 ]
 
