@@ -88,6 +88,7 @@ def run():
                         print("Error occured while saving " + txt)
                 input("Press any key to continue...")
             elif choice == int_choices[2]:
+                utils.cls()
                 exit(0)
 
 #Extract saved WiFi credentials from Windows using netsh command.
