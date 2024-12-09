@@ -13,18 +13,18 @@ The primary supported platform will be Linux, specifically Kali Linux. While the
 ### Software Pre-requisites
 1. Python 3.10
 2. WiFi Hacking
-    1. ifconfig
-    2. iwconfig
-    3. lshw
-    4. aircrack-ng
-    5. cowpatty
-    6. crunch
-    7. wash
-    8. reaver
+    1. `ifconfig`
+    2. `iwconfig`
+    3. `lshw`
+    4. `aircrack-ng`
+    5. `cowpatty`
+    6. `crunch`
+    7. `wash`
+    8. `reaver`
 3. Bluetooth Hacking Tool
-    1. hciconfig
-    2. hcitool
-    3. sdptool
+    1. `hciconfig`
+    2. `hcitool`
+    3. `sdptool`
     
  ### How to use:
  1. Go to directory
